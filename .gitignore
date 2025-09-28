@@ -3,7 +3,12 @@ node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
+package-lock.json
+
+# Build outputs
+dist/
+build/
+*.tsbuildinfo
 
 # Runtime data
 pids
@@ -18,29 +23,11 @@ coverage/
 # nyc test coverage
 .nyc_output
 
-# Grunt intermediate storage (https://gruntjs.com/creating-plugins#storing-task-files)
-.grunt
-
-# Bower dependency directory (https://bower.io/)
-bower_components
-
-# node-waf configuration
-.lock-wscript
-
-# Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
-
-# Dependency directories
-jspm_packages/
-
-# TypeScript cache
-*.tsbuildinfo
+# ESLint cache
+.eslintcache
 
 # Optional npm cache directory
 .npm
-
-# Optional eslint cache
-.eslintcache
 
 # Optional REPL history
 .node_repl_history
@@ -53,39 +40,36 @@ jspm_packages/
 
 # dotenv environment variables file
 .env
+.env.test
+.env.production
 .env.local
-.env.development.local
-.env.test.local
-.env.production.local
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
 
-# Next.js build output
+# next.js build output
 .next
 
-# Nuxt.js build / generate output
+# nuxt.js build output
 .nuxt
-dist
 
-# Gatsby files
-.cache/
-public
+# vuepress build output
+.vuepress/dist
 
-# Storybook build outputs
-.out
-.storybook-out
+# Serverless directories
+.serverless
 
-# Temporary folders
-tmp/
-temp/
+# FuseBox cache
+.fusebox/
 
-# Logs
-logs
-*.log
+# DynamoDB Local files
+.dynamodb/
 
-# Editor directories and files
+# TernJS port file
+.tern-port
+
+# IDE files
 .vscode/
 .idea/
 *.swp
@@ -101,15 +85,21 @@ logs
 ehthumbs.db
 Thumbs.db
 
-# Signal K specific
-*.n2k
+# TypeScript specific
+*.d.ts.map
+
+# Vitest
+coverage/
+.vitest/
+
+# Temporary files
+.cline-files/
+temp/
+tmp/
+
+# Log files
 *.log
-debug.txt
+logs/
 
-# Test files
-test-results/
-test-output/
-
-# Backup files
-*.bak
-*.backup
+# Signal K specific
+.signalk/

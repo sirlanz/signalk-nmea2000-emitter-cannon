@@ -35,6 +35,7 @@ export type N2KFieldValue =
   | null 
   | undefined
   | N2KFieldValue[]
+  | Record<string, any>
 
 /**
  * Common NMEA 2000 field names and their expected types
