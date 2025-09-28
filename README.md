@@ -1,4 +1,4 @@
-# signalk-to-nmea2000-v2
+# sk-n2k-emitter
 
 Signal K server plugin to convert Signal K to NMEA2000 with **enhanced Garmin compatibility**
 
@@ -74,7 +74,7 @@ Extended PGN support and Garmin compatibility enhancements by:
 1. **Through SignalK AppStore (Easiest):**
    - Open your SignalK server web interface (usually http://localhost:3000)
    - Navigate to **Server → AppStore** 
-   - Search for "signalk-to-nmea2000-v2"
+   - Search for "sk-n2k-emitter"
    - Click **Install**
 
 2. **Manual NPM Installation:**
@@ -83,7 +83,7 @@ Extended PGN support and Garmin compatibility enhancements by:
    cd ~/.signalk
    
    # Install the plugin
-   npm install signalk-to-nmea2000-v2
+   npm install sk-n2k-emitter
    
    # Restart SignalK server
    ```
@@ -94,8 +94,8 @@ For the latest development version or to contribute:
 
 ```bash
 # Clone the repository
-git clone https://github.com/NearlCrews/signalk-to-nmea2000-v2.git
-cd signalk-to-nmea2000-v2
+git clone https://github.com/NearlCrews/sk-n2k-emitter.git
+cd sk-n2k-emitter
 
 # Install dependencies
 npm install
@@ -105,7 +105,7 @@ npm link
 
 # Navigate to SignalK config directory and link the plugin
 cd ~/.signalk
-npm link signalk-to-nmea2000-v2
+npm link sk-n2k-emitter
 
 # Restart SignalK server
 ```
@@ -117,7 +117,7 @@ npm link signalk-to-nmea2000-v2
 1. Restart your SignalK server
 2. Open the SignalK admin interface (http://localhost:3000)
 3. Navigate to **Server → Plugin Config**
-4. Look for "Signal K to NMEA 2000 v2" in the plugins list
+4. Look for "SignalK to N2K Emitter" in the plugins list
 5. Enable and configure the plugin as needed
 
 ## Configuration
@@ -223,7 +223,7 @@ Each PGN conversion is implemented as a separate module in `conversions/`:
 
 ## Version History
 
-### v2.23.0 (Enhanced Garmin Compatibility)
+### v1.0.0 (Enhanced Garmin Compatibility)
 - Added 24 new PGN conversions for comprehensive Garmin support
 - Achieved 92% coverage of essential Garmin-supported PGNs
 - Standardized configuration option naming for better UX
@@ -250,6 +250,6 @@ Contributions are welcome! Please:
 
 ## Support
 
-- **Plugin Support**: [Issues and Discussion](https://github.com/NearlCrews/signalk-to-nmea2000-v2)
+- **Plugin Support**: [Issues and Discussion](https://github.com/NearlCrews/sk-n2k-emitter)
 - **SignalK Documentation**: [SignalK.org](https://signalk.org/)
 - **Community Forums**: [SignalK Community Discussions](https://github.com/SignalK/signalk-server/discussions)

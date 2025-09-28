@@ -1,6 +1,6 @@
 {
-  "name": "signalk-to-nmea2000-v2",
-  "version": "2.23.0",
+  "name": "sk-n2k-emitter",
+  "version": "1.0.0",
   "description": "Signal K server plugin to convert Signal K to NMEA2000 with enhanced Garmin compatibility (92% PGN coverage)",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
     "lint": "biome lint .",
     "format": "biome format . --write",
     "check": "biome check .",
-    "create-release": "github-create-release --owner NearlCrews --repository signalk-to-nmea2000-v2",
+    "create-release": "github-create-release --owner NearlCrews --repository sk-n2k-emitter",
     "release": "git tag -d v$npm_package_version ; git tag v$npm_package_version && git push --tags && git push && npm run create-release"
   },
   "keywords": [
@@ -24,7 +24,7 @@
   "signalk-plugin-enabled-by-default": false,
   "signalk": {
     "appIcon": "./assets/icons/icon-72x72.png",
-    "displayName": "Signal K to NMEA 2000 v2"
+    "displayName": "SignalK to N2K Emitter"
   },
   "author": {
     "name": "Scott Bender",
@@ -47,7 +47,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/NearlCrews/signalk-to-nmea2000-v2"
+    "url": "https://github.com/NearlCrews/sk-n2k-emitter"
   },
   "devDependencies": {
     "@canboat/canboatjs": "^3.11.0",

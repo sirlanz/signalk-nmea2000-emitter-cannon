@@ -176,8 +176,8 @@ module.exports = (app) => {
     "to-n2k": processToN2K,
   };
 
-  plugin.id = "signalk-to-nmea2000-v2";
-  plugin.name = "Signal K to NMEA 2000 v2";
+  plugin.id = "sk-n2k-emitter";
+  plugin.name = "SignalK to N2K Emitter";
   plugin.description =
     "Plugin to convert Signal K to NMEA2000 with enhanced Garmin compatibility (92% PGN coverage)";
 

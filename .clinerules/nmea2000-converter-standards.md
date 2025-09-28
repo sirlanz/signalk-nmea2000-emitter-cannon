@@ -1,5 +1,5 @@
 ## Brief overview
-Rules and standards specific to working with the signalk-to-nmea2000-v2 plugin for Signal K to NMEA 2000 conversions. These guidelines ensure proper CanboatJS format compliance, correct PGN message structure, and effective testing practices.
+Rules and standards specific to working with the sk-n2k-emitter plugin for Signal K to NMEA 2000 conversions. These guidelines ensure proper CanboatJS format compliance, correct PGN message structure, and effective testing practices.
 
 ## CanboatJS message format requirements
 - All PGN converters MUST output objects with this exact structure: `{ prio: number, pgn: number, dst: number, fields: { ... } }`
