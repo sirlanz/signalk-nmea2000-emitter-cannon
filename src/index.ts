@@ -505,7 +505,9 @@ export default function createPlugin(app: SignalKApp): SignalKPlugin {
         properties: {
           enabled: { title: 'Enabled', type: 'boolean', default: false },
           resend: { type: 'number', title: 'Resend (seconds)', description: 'If non-zero, the msg will be periodically resent', default: 0 },
-          resendTime: { type: 'number', title: 'Resend Duration (seconds)', description: 'The value will be resent for the given number of seconds', default: 30 }
+          resendTime: { type: 'number', title: 'Resend Duration (seconds)', description: 'The value will be resent for the given number of seconds', default: 30 },
+          environmentwinddirectionTrue: { title: 'Source for environment.wind.directionTrue', description: 'Use data only from this source (leave blank to ignore source)', type: 'string' },
+          environmentwindspeedOverGround: { title: 'Source for environment.wind.speedOverGround', description: 'Use data only from this source (leave blank to ignore source)', type: 'string' }
         }
       },
       WIND_TRUE: {
@@ -515,7 +517,9 @@ export default function createPlugin(app: SignalKApp): SignalKPlugin {
         properties: {
           enabled: { title: 'Enabled', type: 'boolean', default: false },
           resend: { type: 'number', title: 'Resend (seconds)', description: 'If non-zero, the msg will be periodically resent', default: 0 },
-          resendTime: { type: 'number', title: 'Resend Duration (seconds)', description: 'The value will be resent for the given number of seconds', default: 30 }
+          resendTime: { type: 'number', title: 'Resend Duration (seconds)', description: 'The value will be resent for the given number of seconds', default: 30 },
+          environmentwindangleTrueWater: { title: 'Source for environment.wind.angleTrueWater', description: 'Use data only from this source (leave blank to ignore source)', type: 'string' },
+          environmentwindspeedTrue: { title: 'Source for environment.wind.speedTrue', description: 'Use data only from this source (leave blank to ignore source)', type: 'string' }
         }
       },
       ENGINE_STATIC: {
