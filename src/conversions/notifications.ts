@@ -152,11 +152,15 @@ export default function createNotificationsConversion(app: SignalKApp, plugin: {
         // Send delta with alert details (if handleMessage is available)
         if (app.handleMessage) {
           const modifiedDelta = {
-            ...deltaMsg,
+            context: deltaMsg.context,
             updates: [{
-              ...firstUpdate,
+              source: {
+                label: plugin.id,
+                type: "plugin"
+              },
+              timestamp: new Date().toISOString(),
               values: [{
-                ...update,
+                path: update.path,
                 value: {
                   ...value,
                   alertType: type,
