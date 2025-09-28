@@ -1,0 +1,63 @@
+{
+  "name": "signalk-to-nmea2000-v2",
+  "version": "2.23.0",
+  "description": "Signal K server plugin to convert Signal K to NMEA2000 with enhanced Garmin compatibility (92% PGN coverage)",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --timeout 10000",
+    "lint": "biome lint .",
+    "format": "biome format . --write",
+    "check": "biome check .",
+    "create-release": "github-create-release --owner NearlCrews --repository signalk-to-nmea2000-v2",
+    "release": "git tag -d v$npm_package_version ; git tag v$npm_package_version && git push --tags && git push && npm run create-release"
+  },
+  "keywords": [
+    "signalk-node-server-plugin",
+    "signalk-category-nmea2000",
+    "signalk-category-navigation",
+    "nmea2000",
+    "garmin",
+    "marine-electronics",
+    "ais",
+    "navigation"
+  ],
+  "signalk-plugin-enabled-by-default": false,
+  "signalk": {
+    "appIcon": "./assets/icons/icon-72x72.png",
+    "displayName": "Signal K to NMEA 2000 v2"
+  },
+  "author": {
+    "name": "Scott Bender",
+    "email": "scott@scottbender.net"
+  },
+  "contributors": [
+    {
+      "name": "Teppo Kurki"
+    },
+    {
+      "name": "NearlCrews",
+      "url": "https://github.com/NearlCrews"
+    }
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "baconjs": "^3.0.23",
+    "lodash": "^4.17.21",
+    "path-scurry": "^2.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NearlCrews/signalk-to-nmea2000-v2"
+  },
+  "devDependencies": {
+    "@canboat/canboatjs": "^3.11.0",
+    "chai": "^5.1.2",
+    "chai-json-equal": "^0.0.1",
+    "mocha": "^11.7.2",
+    "signalk-server": "^2.16.0",
+    "sinon": "^21.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
