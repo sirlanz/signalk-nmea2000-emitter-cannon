@@ -399,7 +399,11 @@ export default function createPlugin(app: SignalKApp): SignalKPlugin {
         properties: {
           enabled: { title: 'Enabled', type: 'boolean', default: false },
           resend: { type: 'number', title: 'Resend (seconds)', description: 'If non-zero, the msg will be periodically resent', default: 0 },
-          resendTime: { type: 'number', title: 'Resend Duration (seconds)', description: 'The value will be resent for the given number of seconds', default: 30 }
+          resendTime: { type: 'number', title: 'Resend Duration (seconds)', description: 'The value will be resent for the given number of seconds', default: 30 },
+          navigationgnsshorizontalDilution: { title: 'Source for navigation.gnss.horizontalDilution', description: 'Use data only from this source (leave blank to ignore source)', type: 'string' },
+          navigationgnssverticalDilution: { title: 'Source for navigation.gnss.verticalDilution', description: 'Use data only from this source (leave blank to ignore source)', type: 'string' },
+          navigationgnsstitimeDilution: { title: 'Source for navigation.gnss.timeDilution', description: 'Use data only from this source (leave blank to ignore source)', type: 'string' },
+          navigationgnssmode: { title: 'Source for navigation.gnss.mode', description: 'Use data only from this source (leave blank to ignore source)', type: 'string' }
         }
       },
       GNSS_SATELLITES: {
@@ -409,7 +413,9 @@ export default function createPlugin(app: SignalKApp): SignalKPlugin {
         properties: {
           enabled: { title: 'Enabled', type: 'boolean', default: false },
           resend: { type: 'number', title: 'Resend (seconds)', description: 'If non-zero, the msg will be periodically resent', default: 0 },
-          resendTime: { type: 'number', title: 'Resend Duration (seconds)', description: 'The value will be resent for the given number of seconds', default: 30 }
+          resendTime: { type: 'number', title: 'Resend Duration (seconds)', description: 'The value will be resent for the given number of seconds', default: 30 },
+          navigationgnsssatellitesInViewcount: { title: 'Source for navigation.gnss.satellitesInView.count', description: 'Use data only from this source (leave blank to ignore source)', type: 'string' },
+          navigationgnsssatellitesInViewsatellites: { title: 'Source for navigation.gnss.satellitesInView.satellites', description: 'Use data only from this source (leave blank to ignore source)', type: 'string' }
         }
       },
       AIS: {
