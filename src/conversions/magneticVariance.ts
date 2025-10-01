@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage } from '../types/index.js'
+import type { ConversionModule, N2KMessage } from "../types/index.js";
 
 /**
  * Magnetic Variance conversion module - converts Signal K magnetic variation to NMEA 2000 PGN 127258
@@ -11,12 +11,12 @@ export default function createMagneticVarianceConversion(): ConversionModule {
     callback: (magneticVariation: unknown, ageOfService: unknown): N2KMessage[] => {
       try {
         // Validate magnetic variation input - required field
-        if (typeof magneticVariation !== 'number') {
-          return []
+        if (typeof magneticVariation !== "number") {
+          return [];
         }
 
         // Validate age of service - optional field with default
-        const ageValue = typeof ageOfService === 'number' ? ageOfService : 0
+        const ageValue = typeof ageOfService === "number" ? ageOfService : 0;
 
         return [
           {
@@ -30,10 +30,10 @@ export default function createMagneticVarianceConversion(): ConversionModule {
               variation: magneticVariation,
             },
           },
-        ]
+        ];
       } catch (err) {
-        console.error('Error in magnetic variance conversion:', err)
-        return []
+        console.error("Error in magnetic variance conversion:", err);
+        return [];
       }
     },
 
@@ -69,5 +69,5 @@ export default function createMagneticVarianceConversion(): ConversionModule {
         ],
       },
     ],
-  }
+  };
 }

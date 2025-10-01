@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage } from '../types/index.js';
+import type { ConversionModule, N2KMessage } from "../types/index.js";
 
 interface DestinationPoint {
   position?: {
@@ -19,7 +19,7 @@ export default function createNavigationDataConversions(): ConversionModule[] {
       optionKey: "CROSS_TRACK_ERROR",
       keys: ["navigation.course.calcValues.crossTrackError"],
       callback: (XTE: unknown): N2KMessage[] => {
-        if (typeof XTE !== 'number') {
+        if (typeof XTE !== "number") {
           return [];
         }
 
@@ -80,12 +80,12 @@ export default function createNavigationDataConversions(): ConversionModule[] {
         pp: unknown,
         rte: unknown
       ): N2KMessage[] => {
-        if (typeof distToDest !== 'number') {
+        if (typeof distToDest !== "number") {
           return [];
         }
 
         const dateObj = new Date();
-        const wcvValue = typeof WCV === 'number' ? WCV : 0;
+        const wcvValue = typeof WCV === "number" ? WCV : 0;
         const secondsToGo = wcvValue > 0 ? Math.trunc(distToDest / wcvValue) : 0;
         const etaDate = Math.trunc((dateObj.getTime() / 1000 + secondsToGo) / 86400);
         const etaTime =
@@ -113,13 +113,15 @@ export default function createNavigationDataConversions(): ConversionModule[] {
               calculationType: "Rhumbline",
               etaTime: wcvValue > 0 ? etaTime : undefined,
               etaDate: wcvValue > 0 ? etaDate : undefined,
-              bearingOriginToDestinationWaypoint: typeof bearingOriginToDest === 'number' ? bearingOriginToDest : undefined,
-              bearingPositionToDestinationWaypoint: typeof bearingToDest === 'number' ? bearingToDest : undefined,
+              bearingOriginToDestinationWaypoint:
+                typeof bearingOriginToDest === "number" ? bearingOriginToDest : undefined,
+              bearingPositionToDestinationWaypoint:
+                typeof bearingToDest === "number" ? bearingToDest : undefined,
               originWaypointNumber: undefined,
               destinationWaypointNumber: Number.parseInt(String(wpid), 10),
               destinationLatitude: destination?.position?.latitude,
               destinationLongitude: destination?.position?.longitude,
-              waypointClosingVelocity: typeof WCV === 'number' ? WCV : undefined,
+              waypointClosingVelocity: typeof WCV === "number" ? WCV : undefined,
             },
           },
         ];
@@ -138,7 +140,9 @@ export default function createNavigationDataConversions(): ConversionModule[] {
           ],
           expected: [
             {
-              __preprocess__: (testResult: { fields: { etaDate?: unknown; etaTime?: unknown } }) => {
+              __preprocess__: (testResult: {
+                fields: { etaDate?: unknown; etaTime?: unknown };
+              }) => {
                 // These change every time
                 delete testResult.fields.etaDate;
                 delete testResult.fields.etaTime;
@@ -191,12 +195,12 @@ export default function createNavigationDataConversions(): ConversionModule[] {
         pp: unknown,
         rte: unknown
       ): N2KMessage[] => {
-        if (typeof distToDest !== 'number') {
+        if (typeof distToDest !== "number") {
           return [];
         }
 
         const dateObj = new Date();
-        const wcvValue = typeof WCV === 'number' ? WCV : 0;
+        const wcvValue = typeof WCV === "number" ? WCV : 0;
         const secondsToGo = wcvValue > 0 ? Math.trunc(distToDest / wcvValue) : 0;
         const etaDate = Math.trunc((dateObj.getTime() / 1000 + secondsToGo) / 86400);
         const etaTime =
@@ -224,13 +228,15 @@ export default function createNavigationDataConversions(): ConversionModule[] {
               calculationType: "Great Circle",
               etaTime: wcvValue > 0 ? etaTime : undefined,
               etaDate: wcvValue > 0 ? etaDate : undefined,
-              bearingOriginToDestinationWaypoint: typeof bearingOriginToDest === 'number' ? bearingOriginToDest : undefined,
-              bearingPositionToDestinationWaypoint: typeof bearingToDest === 'number' ? bearingToDest : undefined,
+              bearingOriginToDestinationWaypoint:
+                typeof bearingOriginToDest === "number" ? bearingOriginToDest : undefined,
+              bearingPositionToDestinationWaypoint:
+                typeof bearingToDest === "number" ? bearingToDest : undefined,
               originWaypointNumber: undefined,
               destinationWaypointNumber: Number.parseInt(String(wpid), 10),
               destinationLatitude: destination?.position?.latitude,
               destinationLongitude: destination?.position?.longitude,
-              waypointClosingVelocity: typeof WCV === 'number' ? WCV : undefined,
+              waypointClosingVelocity: typeof WCV === "number" ? WCV : undefined,
             },
           },
         ];
@@ -249,7 +255,9 @@ export default function createNavigationDataConversions(): ConversionModule[] {
           ],
           expected: [
             {
-              __preprocess__: (testResult: { fields: { etaDate?: unknown; etaTime?: unknown } }) => {
+              __preprocess__: (testResult: {
+                fields: { etaDate?: unknown; etaTime?: unknown };
+              }) => {
                 // These change every time
                 delete testResult.fields.etaDate;
                 delete testResult.fields.etaTime;

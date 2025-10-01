@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage } from '../types/index.js'
+import type { ConversionModule, N2KMessage } from "../types/index.js";
 
 /**
  * True Heading conversion module - converts Signal K true heading to NMEA 2000 PGN 127250
@@ -11,8 +11,8 @@ export default function createTrueHeadingConversion(): ConversionModule {
     callback: (heading: unknown): N2KMessage[] => {
       try {
         // Validate heading input - required field
-        if (typeof heading !== 'number') {
-          return []
+        if (typeof heading !== "number") {
+          return [];
         }
 
         return [
@@ -27,10 +27,10 @@ export default function createTrueHeadingConversion(): ConversionModule {
               reference: "True",
             },
           },
-        ]
+        ];
       } catch (err) {
-        console.error('Error in true heading conversion:', err)
-        return []
+        console.error("Error in true heading conversion:", err);
+        return [];
       }
     },
 
@@ -51,5 +51,5 @@ export default function createTrueHeadingConversion(): ConversionModule {
         ],
       },
     ],
-  }
+  };
 }

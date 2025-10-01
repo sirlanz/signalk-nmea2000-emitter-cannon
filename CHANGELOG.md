@@ -1,5 +1,34 @@
 ## Change Log
 
+### v1.1.2 (2025/10/01) - Garmin PGN Alignment & Code Quality
+
+**Garmin PGN Specification Alignment**:
+- **Removed ISO Message Conversions**: Deleted ISO message conversions (PGNs 59392, 59904, 60928) as they are not part of the Garmin spec
+- **Added Missing SID Fields**: Added Sequence Identifier (SID=87) to multiple PGNs for proper message sequencing
+  - PGN 129026 (COG & SOG), 128267 (Depth), 130306 (Wind), 130312/130316 (Temperature)
+  - PGN 128259 (Speed), 129029 (GNSS Position)
+- **Corrected Priority Values**: Updated message priorities to match Garmin specifications
+  - PGN 128267 (Depth): 2 → 3
+  - PGN 130312/130316 (Temperature): 2 → 5
+- **Fixed Field Names**: Updated PGN 129808 (DSC Calls) field names to match Garmin spec (removed "Symbol" suffix)
+- **PGN List Format**: Changed PGN 126464 list format from array of numbers to array of objects with `pgn` properties
+
+**Canboatjs Framework Alignment**:
+- **Test Expectations Updated**: Updated all test expectations to match canboatjs encode/decode behavior
+  - Fixed field precision issues (angles, temperatures)
+  - Removed fields that canboat drops during encode/decode cycle
+  - Updated time format representations (seconds → time strings)
+  - Fixed unit conversions (degrees → radians for elevation/azimuth)
+- **All Tests Passing**: 74 conversion modules with 100% test success rate
+
+**Code Quality Improvements**:
+- **Linting**: Applied Biome linter with unsafe fixes - cleaned up 56 files
+  - Removed unused imports and parameters
+  - Fixed unused variables
+  - Only 9 acceptable warnings remain (related to `any` types)
+- **Build**: Successfully builds 201.7kb production bundle
+- **TypeScript**: Zero compilation errors with strict type checking
+
 ### v1.1.1 (2025/09/28) - Critical Bug Fixes & Enhanced Configuration
 **Hotfix Release: Plugin Functionality Restored**
 

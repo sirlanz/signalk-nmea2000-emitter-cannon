@@ -1,18 +1,18 @@
 import type {
+  ConversionCallback,
   ConversionModule,
-  N2KMessage,
   JSONSchema,
+  N2KMessage,
   SignalKApp,
   SignalKPlugin,
-  ConversionCallback,
-} from '../types/index.js'
+} from "../types/index.js";
 
 /**
  * Battery configuration interface
  */
 interface BatteryConfig {
-  signalkId: string | number
-  instanceId: number
+  signalkId: string | number;
+  instanceId: number;
 }
 
 /**
@@ -20,48 +20,48 @@ interface BatteryConfig {
  */
 interface BatteryOptions {
   BATTERY: {
-    batteries: BatteryConfig[]
-  }
+    batteries: BatteryConfig[];
+  };
 }
 
 /**
  * Battery conversion module - converts Signal K battery data to NMEA 2000 PGNs 127506 & 127508
  */
 export default function createBatteryConversion(
-  app: SignalKApp,
-  plugin: SignalKPlugin,
+  _app: SignalKApp,
+  _plugin: SignalKPlugin
 ): ConversionModule<any> {
   const batteryKeys = [
-    'voltage',
-    'current',
-    'temperature',
-    'Temperature1',
-    'capacity.stateOfCharge',
-    'capacity.timeRemaining',
-    'capacity.remaining',
-    'capacity.actual',
-    'capacity.stateOfHealth',
-    'ripple',
-  ]
+    "voltage",
+    "current",
+    "temperature",
+    "Temperature1",
+    "capacity.stateOfCharge",
+    "capacity.timeRemaining",
+    "capacity.remaining",
+    "capacity.actual",
+    "capacity.stateOfHealth",
+    "ripple",
+  ];
 
   return {
-    title: 'Battery (127506 & 127508)',
-    optionKey: 'BATTERY',
-    context: 'vessels.self',
-    properties: (): JSONSchema['properties'] => ({
+    title: "Battery (127506 & 127508)",
+    optionKey: "BATTERY",
+    context: "vessels.self",
+    properties: (): JSONSchema["properties"] => ({
       batteries: {
-        title: 'Battery Mapping',
-        type: 'array',
+        title: "Battery Mapping",
+        type: "array",
         items: {
-          type: 'object',
+          type: "object",
           properties: {
             signalkId: {
-              title: 'Signal K battery id',
-              type: 'string',
+              title: "Signal K battery id",
+              type: "string",
             },
             instanceId: {
-              title: 'NMEA2000 Battery Instance Id',
-              type: 'number',
+              title: "NMEA2000 Battery Instance Id",
+              type: "number",
             },
           },
         },
@@ -80,9 +80,9 @@ export default function createBatteryConversion(
     },
 
     conversions: (options: unknown) => {
-      const batteryOptions = options as BatteryOptions
+      const batteryOptions = options as BatteryOptions;
       if (!batteryOptions?.BATTERY?.batteries) {
-        return null
+        return null;
       }
 
       return batteryOptions.BATTERY.batteries.map((battery) => ({
@@ -98,12 +98,12 @@ export default function createBatteryConversion(
           capacityRemaining: number | null,
           capacityActual: number | null,
           stateOfHealth: number | null,
-          ripple: number | null,
+          ripple: number | null
         ) => {
-          const res: N2KMessage[] = []
+          const res: N2KMessage[] = [];
 
           // Prefer 'temperature' if available; otherwise fall back to 'Temperature1' (both are Kelvin)
-          const tempOut = temperature !== null ? temperature : temperature1
+          const tempOut = temperature !== null ? temperature : temperature1;
 
           // PGN 127508: Battery Status
           if (voltage !== null || current !== null || tempOut !== null) {
@@ -117,30 +117,30 @@ export default function createBatteryConversion(
                 current: current,
                 temperature: tempOut,
               },
-            })
+            });
           }
 
           // Calculate timeRemaining if not provided: remaining [C] / discharge current [A] → seconds
-          let computedTR: number | null = null
+          let computedTR: number | null = null;
           if (timeRemaining === null) {
             // Prefer remainingC; if not available, derive from actual * SoC
             const remainingC =
               capacityRemaining !== null
                 ? capacityRemaining
                 : capacityActual !== null && stateOfCharge !== null
-                ? capacityActual * stateOfCharge
-                : null
+                  ? capacityActual * stateOfCharge
+                  : null;
 
             // Determine discharge current magnitude supporting either convention:
             // - positive current = discharging
             // - negative current = discharging
-            let dischargeCurrentA: number | null = null
+            let dischargeCurrentA: number | null = null;
             if (current !== null && Number.isFinite(current)) {
-              const threshold = 0.1
+              const threshold = 0.1;
               if (current > threshold) {
-                dischargeCurrentA = current // positive discharging
+                dischargeCurrentA = current; // positive discharging
               } else if (current < -threshold) {
-                dischargeCurrentA = -current // negative discharging
+                dischargeCurrentA = -current; // negative discharging
               }
             }
 
@@ -151,11 +151,11 @@ export default function createBatteryConversion(
               Number.isFinite(dischargeCurrentA) &&
               dischargeCurrentA > 0
             ) {
-              let seconds = Math.round(remainingC / dischargeCurrentA) // C / A = s
-              const max = 30 * 24 * 3600 // cap at 30 days
-              if (seconds < 0) seconds = 0
-              if (seconds > max) seconds = max
-              computedTR = seconds
+              let seconds = Math.round(remainingC / dischargeCurrentA); // C / A = s
+              const max = 30 * 24 * 3600; // cap at 30 days
+              if (seconds < 0) seconds = 0;
+              if (seconds > max) seconds = max;
+              computedTR = seconds;
             }
           }
 
@@ -167,8 +167,8 @@ export default function createBatteryConversion(
             stateOfHealth !== null ||
             ripple !== null
           ) {
-            const adjustedStateOfCharge = stateOfCharge !== null ? stateOfCharge * 100 : null
-            const adjustedStateOfHealth = stateOfHealth !== null ? stateOfHealth * 100 : null
+            const adjustedStateOfCharge = stateOfCharge !== null ? stateOfCharge * 100 : null;
+            const adjustedStateOfHealth = stateOfHealth !== null ? stateOfHealth * 100 : null;
 
             res.push({
               prio: 2,
@@ -176,16 +176,16 @@ export default function createBatteryConversion(
               dst: 255,
               fields: {
                 instance: battery.instanceId,
-                dcType: 'Battery',
+                dcType: "Battery",
                 stateOfCharge: adjustedStateOfCharge,
                 stateOfHealth: adjustedStateOfHealth,
                 timeRemaining: timeRemaining !== null ? timeRemaining : computedTR,
                 rippleVoltage: ripple,
               },
-            })
+            });
           }
 
-          return res
+          return res;
         }) as ConversionCallback<
           [
             number | null,
@@ -223,10 +223,10 @@ export default function createBatteryConversion(
                 dst: 255,
                 fields: {
                   instance: 1,
-                  dcType: 'Battery',
+                  dcType: "Battery",
                   stateOfCharge: 93,
                   stateOfHealth: 60,
-                  timeRemaining: '03:26:00',
+                  timeRemaining: "03:26:00",
                   rippleVoltage: 12,
                 },
               },
@@ -253,9 +253,9 @@ export default function createBatteryConversion(
                 dst: 255,
                 fields: {
                   instance: 1,
-                  dcType: 'Battery',
+                  dcType: "Battery",
                   stateOfCharge: 100,
-                  timeRemaining: '05:15:00',
+                  timeRemaining: "05:15:00",
                 },
               },
             ],
@@ -281,15 +281,15 @@ export default function createBatteryConversion(
                 dst: 255,
                 fields: {
                   instance: 1,
-                  dcType: 'Battery',
+                  dcType: "Battery",
                   stateOfCharge: 100,
-                  timeRemaining: '05:15:00',
+                  timeRemaining: "05:15:00",
                 },
               },
             ],
           },
         ],
-      }))
+      }));
     },
-  }
+  };
 }

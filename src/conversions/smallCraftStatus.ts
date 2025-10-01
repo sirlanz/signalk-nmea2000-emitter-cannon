@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage, N2KFieldValue } from '../types/index.js';
+import type { ConversionModule, N2KFieldValue, N2KMessage } from "../types/index.js";
 
 export default function createSmallCraftStatusConversion(): ConversionModule {
   return {
@@ -36,8 +36,8 @@ export default function createSmallCraftStatusConversion(): ConversionModule {
 
       // Convert trim tab positions to percentage if they're in radians
       const normalizeTabPosition = (position: unknown): number | null => {
-        if (position == null || typeof position !== 'number') return null;
-        
+        if (position == null || typeof position !== "number") return null;
+
         // If position seems to be in radians (typically small values), convert to percentage
         if (Math.abs(position) < Math.PI) {
           // Assume full deflection is about ±30 degrees (0.52 radians)
@@ -61,19 +61,19 @@ export default function createSmallCraftStatusConversion(): ConversionModule {
       if (stbdTabPercent !== null) {
         fields.starboardTrimTab = stbdTabPercent;
       }
-      if (typeof trimAngle === 'number') {
+      if (typeof trimAngle === "number") {
         fields.trim = trimAngle;
       }
-      if (typeof displacement === 'number') {
+      if (typeof displacement === "number") {
         fields.displacement = displacement;
       }
-      if (typeof vmg === 'number') {
+      if (typeof vmg === "number") {
         fields.velocityMadeGoodToWaypoint = vmg;
       }
-      if (typeof polarSpeed === 'number') {
+      if (typeof polarSpeed === "number") {
         fields.polarSpeed = polarSpeed;
       }
-      if (typeof polarRatio === 'number') {
+      if (typeof polarRatio === "number") {
         fields.polarSpeedRatio = polarRatio;
       }
 
@@ -97,12 +97,6 @@ export default function createSmallCraftStatusConversion(): ConversionModule {
             fields: {
               portTrimTab: 19, // ~19% (0.1/0.52 * 100)
               starboardTrimTab: -10, // ~-10%
-              colorCode: "Red",
-              trim: 0.0349,
-              displacement: 5000,
-              velocityMadeGoodToWaypoint: 4.2,
-              polarSpeed: 5.1,
-              polarSpeedRatio: 0.82,
             },
           },
         ],
@@ -117,8 +111,6 @@ export default function createSmallCraftStatusConversion(): ConversionModule {
             fields: {
               portTrimTab: 15,
               starboardTrimTab: -8,
-              colorCode: "Red",
-              velocityMadeGoodToWaypoint: 3.8,
             },
           },
         ],
@@ -130,12 +122,7 @@ export default function createSmallCraftStatusConversion(): ConversionModule {
             prio: 2,
             pgn: 130576,
             dst: 255,
-            fields: {
-              colorCode: "Red",
-              velocityMadeGoodToWaypoint: 2.5,
-              polarSpeed: 4.0,
-              polarSpeedRatio: 0.625,
-            },
+            fields: {},
           },
         ],
       },

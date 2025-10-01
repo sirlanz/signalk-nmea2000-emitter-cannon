@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage, SignalKApp } from '../types/index.js';
+import type { ConversionModule, N2KMessage, SignalKApp } from "../types/index.js";
 
 interface AlertValue {
   state: string;
@@ -20,7 +20,7 @@ interface NotificationDelta {
 const alertTypes: Record<string, string> = {
   emergency: "Emergency Alarm",
   alarm: "Alarm",
-  warn: "Warning", 
+  warn: "Warning",
   alert: "Caution",
 };
 
@@ -31,7 +31,10 @@ let idCounter = 0;
 const ids: Record<string, { alertId: number }> = {};
 let pgns: N2KMessage[] = [];
 
-export default function createNotificationsConversion(app: SignalKApp, plugin: { id: string }): ConversionModule {
+export default function createNotificationsConversion(
+  app: SignalKApp,
+  plugin: { id: string }
+): ConversionModule {
   return {
     title: "Notifications (126983, 126985)",
     optionKey: "NOTIFICATIONS",
@@ -39,7 +42,7 @@ export default function createNotificationsConversion(app: SignalKApp, plugin: {
     context: "vessels.self",
     sourceType: "subscription",
     callback: (delta: unknown): N2KMessage[] => {
-      if (!delta || typeof delta !== 'object') {
+      if (!delta || typeof delta !== "object") {
         return [];
       }
 
@@ -49,7 +52,11 @@ export default function createNotificationsConversion(app: SignalKApp, plugin: {
       }
 
       const firstUpdate = deltaMsg.updates[0];
-      if (!firstUpdate?.values || !Array.isArray(firstUpdate.values) || firstUpdate.values.length === 0) {
+      if (
+        !firstUpdate?.values ||
+        !Array.isArray(firstUpdate.values) ||
+        firstUpdate.values.length === 0
+      ) {
         return [];
       }
 
@@ -67,8 +74,8 @@ export default function createNotificationsConversion(app: SignalKApp, plugin: {
       }
 
       let alertId: number;
-      
-      if (typeof value.alertId === 'number') {
+
+      if (typeof value.alertId === "number") {
         alertId = value.alertId;
         app.debug(`Using existing alertId ${alertId} for ${update.path}`);
 
@@ -78,7 +85,7 @@ export default function createNotificationsConversion(app: SignalKApp, plugin: {
         if (value.state !== "normal") {
           const method = value.method || [];
           let state: string;
-          
+
           if (value.state === "normal") {
             state = "Normal";
           } else if (method.length === 0) {
@@ -90,7 +97,7 @@ export default function createNotificationsConversion(app: SignalKApp, plugin: {
           }
 
           const idName = alertId.toString().padStart(16, "0");
-          
+
           pgns.push({
             prio: 2,
             pgn: 126985,
@@ -109,7 +116,7 @@ export default function createNotificationsConversion(app: SignalKApp, plugin: {
               alertTextDescription: value.message,
             },
           });
-          
+
           pgns.push({
             prio: 2,
             pgn: 126983,
@@ -124,8 +131,9 @@ export default function createNotificationsConversion(app: SignalKApp, plugin: {
               dataSourceInstance: 0,
               dataSourceIndexSource: 0,
               alertOccurrenceNumber: 0,
-              temporarySilenceStatus: (value.method && value.method.indexOf("sound") === -1) ? "Yes" : "No",
-              acknowledgeStatus: (!value.method || value.method.length === 0) ? "Yes" : "No",
+              temporarySilenceStatus:
+                value.method && value.method.indexOf("sound") === -1 ? "Yes" : "No",
+              acknowledgeStatus: !value.method || value.method.length === 0 ? "Yes" : "No",
               escalationStatus: "No",
               temporarySilenceSupport: "Yes",
               acknowledgeSupport: "Yes",
@@ -153,28 +161,35 @@ export default function createNotificationsConversion(app: SignalKApp, plugin: {
         if (app.handleMessage) {
           const modifiedDelta = {
             context: deltaMsg.context,
-            updates: [{
-              source: {
-                label: plugin.id,
-                type: "plugin"
+            updates: [
+              {
+                source: {
+                  label: plugin.id,
+                  type: "plugin",
+                },
+                timestamp: new Date().toISOString(),
+                values: [
+                  {
+                    path: update.path,
+                    value: {
+                      ...value,
+                      alertType: type,
+                      alertCategory: alertCategory,
+                      alertSystem: alertSystem,
+                      alertId: alertId,
+                    },
+                  },
+                ],
               },
-              timestamp: new Date().toISOString(),
-              values: [{
-                path: update.path,
-                value: {
-                  ...value,
-                  alertType: type,
-                  alertCategory: alertCategory,
-                  alertSystem: alertSystem,
-                  alertId: alertId,
-                }
-              }]
-            }]
+            ],
           };
-          
+
           app.debug(`New delta with alertId: ${JSON.stringify(modifiedDelta)}`);
           // Cast to compatible type for Signal K delta handling
-          app.handleMessage(plugin.id, modifiedDelta as Parameters<NonNullable<typeof app.handleMessage>>[1]);
+          app.handleMessage(
+            plugin.id,
+            modifiedDelta as Parameters<NonNullable<typeof app.handleMessage>>[1]
+          );
         }
       }
 

@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage } from '../types/index.js'
+import type { ConversionModule, N2KMessage } from "../types/index.js";
 
 /**
  * Rudder position conversion module - converts Signal K rudder data to NMEA 2000 PGN 127245
@@ -12,21 +12,21 @@ export default function createRudderConversion(): ConversionModule {
     callback: (rudderAngle: unknown, rudderAngleTarget: unknown): N2KMessage[] => {
       try {
         // Validate inputs
-        const angle = typeof rudderAngle === 'number' ? rudderAngle : null
-        const target = typeof rudderAngleTarget === 'number' ? rudderAngleTarget : null
+        const angle = typeof rudderAngle === "number" ? rudderAngle : null;
+        const target = typeof rudderAngleTarget === "number" ? rudderAngleTarget : null;
 
         // Return empty array if no rudder data available
         if (angle === null && target === null) {
-          return []
+          return [];
         }
 
         // Determine direction order based on target angle
-        let directionOrder: string = "No Order"
+        let directionOrder: string = "No Order";
         if (target !== null) {
           if (target > 0) {
-            directionOrder = "Turn Right"
+            directionOrder = "Turn Right";
           } else if (target < 0) {
-            directionOrder = "Turn Left"
+            directionOrder = "Turn Left";
           }
         }
 
@@ -42,10 +42,10 @@ export default function createRudderConversion(): ConversionModule {
               position: angle,
             },
           },
-        ]
+        ];
       } catch (err) {
-        console.error('Error in rudder conversion:', err)
-        return []
+        console.error("Error in rudder conversion:", err);
+        return [];
       }
     },
 
@@ -117,5 +117,5 @@ export default function createRudderConversion(): ConversionModule {
         ],
       },
     ],
-  }
+  };
 }

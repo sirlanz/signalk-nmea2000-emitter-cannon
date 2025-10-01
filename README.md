@@ -8,10 +8,10 @@ A modern TypeScript Signal K server plugin that converts Signal K data to NMEA 2
 
 ## Features
 
-- 🚀 **Modern TypeScript**: Fully converted to TypeScript 5.9+ with strict type safety and zero `any` types
-- ⚓ **Complete PGN Coverage**: Supports 100% of essential NMEA 2000 Parameter Group Numbers (56 unique PGNs)
+- 🚀 **Modern TypeScript**: Fully converted to TypeScript 5.9+ with strict type safety
+- ⚓ **Complete PGN Coverage**: Supports 100% of essential NMEA 2000 Parameter Group Numbers (74 conversion modules)
 - 🔌 **Signal K Native**: Seamless integration with Signal K server ecosystem
-- 🎯 **Garmin Compatibility**: Enhanced compatibility with Garmin marine electronics
+- 🎯 **Garmin Compatibility**: Aligned with Garmin PGN specifications and canboatjs framework
 - 🔄 **Reactive Processing**: Built on RxJS for efficient real-time data processing (replaced BaconJS)
 - ⚡ **High Performance**: Modern build system with esbuild for fast compilation (13.8kb bundle)
 - 🧪 **Fully Tested**: Comprehensive test suite with Vitest and CanboatJS validation
@@ -82,15 +82,16 @@ cp -r dist/sk-n2k-emitter ~/.signalk/node_modules/
 - **PGN 130311**: Environmental parameters (pressure)
 - **PGN 130312**: Temperature
 
-### Complete Coverage (56+ unique PGNs)
+### Complete Coverage (74 Conversion Modules)
 
 **All essential marine electronics protocols supported including:**
-- AIS (Class A, B, SAR, AtoN) - 7 PGNs
-- Navigation & routing - 15+ PGNs  
-- Engine & propulsion - 8+ PGNs
-- Environmental monitoring - 10+ PGNs
-- Safety & communications - 12+ PGNs
+- AIS (Class A, B, SAR, AtoN) - Multiple PGNs
+- Navigation & routing - Comprehensive coverage
+- Engine & propulsion - Full support
+- Environmental monitoring - Complete suite
+- Safety & communications - Full DSC and radio support
 - Vendor-specific (Raymarine) - 4+ PGNs
+- **Aligned with Garmin specifications** - Removed ISO messages, added SID fields, corrected priorities
 
 ## Development
 

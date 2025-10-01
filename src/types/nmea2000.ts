@@ -4,15 +4,15 @@
  */
 export interface N2KMessage {
   /** Priority (0-7, typically 2 for data messages, 6 for control) */
-  prio: number
+  prio: number;
   /** Parameter Group Number - identifies the message type */
-  pgn: number
+  pgn: number;
   /** Destination address (255 for broadcast) */
-  dst: number
+  dst: number;
   /** Source address (optional, set by canboat) */
-  src?: number
+  src?: number;
   /** Message fields containing the actual data */
-  fields: Record<string, N2KFieldValue>
+  fields: Record<string, N2KFieldValue>;
 }
 
 /**
@@ -20,9 +20,9 @@ export interface N2KMessage {
  */
 export interface TimedN2KMessage extends N2KMessage {
   /** Timestamp when the message was created */
-  timestamp?: string
+  timestamp?: string;
   /** Message sequence ID */
-  id?: string
+  id?: string;
 }
 
 /**
@@ -35,32 +35,32 @@ export type N2KFieldValue =
   | null
   | undefined
   | N2KFieldValue[]
-  | Record<string, unknown>
+  | Record<string, unknown>;
 
 /**
  * Common NMEA 2000 field names and their expected types
  */
 export interface CommonN2KFields {
   /** Engine or device instance ID */
-  instance?: number
+  instance?: number;
   /** Sequence Identifier */
-  SID?: number
+  SID?: number;
   /** Temperature in Kelvin */
-  temperature?: number
+  temperature?: number;
   /** Voltage in Volts */
-  voltage?: number
+  voltage?: number;
   /** Current in Amperes */
-  current?: number
+  current?: number;
   /** Pressure in Pascals */
-  pressure?: number
+  pressure?: number;
   /** Speed in m/s */
-  speed?: number
+  speed?: number;
   /** Angle in radians */
-  angle?: number
+  angle?: number;
   /** Time in seconds */
-  time?: number
+  time?: number;
   /** Percentage (0-100) */
-  percentage?: number
+  percentage?: number;
 }
 
 /**
@@ -68,15 +68,15 @@ export interface CommonN2KFields {
  */
 export interface BatteryFields extends CommonN2KFields {
   /** DC source type */
-  dcType?: 'Battery' | 'Alternator' | 'Converter' | 'Solar Cell' | 'Wind Generator'
+  dcType?: "Battery" | "Alternator" | "Converter" | "Solar Cell" | "Wind Generator";
   /** State of charge percentage */
-  stateOfCharge?: number
+  stateOfCharge?: number;
   /** State of health percentage */
-  stateOfHealth?: number
+  stateOfHealth?: number;
   /** Time remaining in seconds */
-  timeRemaining?: number
+  timeRemaining?: number;
   /** Ripple voltage */
-  rippleVoltage?: number
+  rippleVoltage?: number;
 }
 
 /**
@@ -84,27 +84,27 @@ export interface BatteryFields extends CommonN2KFields {
  */
 export interface EngineFields extends CommonN2KFields {
   /** Engine instance identifier */
-  engineInstance?: number
+  engineInstance?: number;
   /** Oil pressure in Pascals */
-  oilPressure?: number
+  oilPressure?: number;
   /** Oil temperature in Kelvin */
-  oilTemperature?: number
+  oilTemperature?: number;
   /** Coolant temperature in Kelvin */
-  coolantTemperature?: number
+  coolantTemperature?: number;
   /** Alternator potential in Volts */
-  alternatorPotential?: number
+  alternatorPotential?: number;
   /** Fuel rate in m³/s */
-  fuelRate?: number
+  fuelRate?: number;
   /** Total engine hours */
-  totalEngineHours?: number
+  totalEngineHours?: number;
   /** Engine load percentage */
-  engineLoad?: number
+  engineLoad?: number;
   /** Engine torque percentage */
-  engineTorque?: number
+  engineTorque?: number;
   /** Boost pressure in Pascals */
-  boostPressure?: number
+  boostPressure?: number;
   /** Trim/tilt percentage */
-  tiltTrim?: number
+  tiltTrim?: number;
 }
 
 /**
@@ -112,11 +112,11 @@ export interface EngineFields extends CommonN2KFields {
  */
 export interface WindFields extends CommonN2KFields {
   /** Wind speed in m/s */
-  windSpeed?: number
+  windSpeed?: number;
   /** Wind angle in radians */
-  windAngle?: number
+  windAngle?: number;
   /** Wind reference (Apparent, True, etc.) */
-  reference?: 'True' | 'Apparent' | 'True (boat referenced)' | 'True (water referenced)'
+  reference?: "True" | "Apparent" | "True (boat referenced)" | "True (water referenced)";
 }
 
 /**
@@ -124,9 +124,9 @@ export interface WindFields extends CommonN2KFields {
  */
 export interface DepthFields extends CommonN2KFields {
   /** Depth below transducer in meters */
-  depth?: number
+  depth?: number;
   /** Offset from transducer to surface/keel in meters */
-  offset?: number
+  offset?: number;
 }
 
 /**
@@ -134,40 +134,43 @@ export interface DepthFields extends CommonN2KFields {
  */
 export interface GPSFields extends CommonN2KFields {
   /** Latitude in radians */
-  latitude?: number
+  latitude?: number;
   /** Longitude in radians */
-  longitude?: number
+  longitude?: number;
   /** Altitude in meters */
-  altitude?: number
+  altitude?: number;
   /** Course over ground in radians */
-  cog?: number
+  cog?: number;
   /** Speed over ground in m/s */
-  sog?: number
+  sog?: number;
   /** GPS quality indicator */
-  gnssType?: string
+  gnssType?: string;
   /** Method of positioning */
-  method?: string
+  method?: string;
   /** Number of satellites */
-  nSatellites?: number
+  nSatellites?: number;
   /** Horizontal dilution of precision */
-  hdop?: number
+  hdop?: number;
   /** Position dilution of precision */
-  pdop?: number
+  pdop?: number;
   /** Geoidal separation in meters */
-  geoidalSeparation?: number
+  geoidalSeparation?: number;
 }
 
 /**
  * Validation function type for N2K messages
  */
-export type N2KMessageValidator = (message: unknown) => N2KMessage
+export type N2KMessageValidator = (message: unknown) => N2KMessage;
 
 /**
  * Error types for N2K message validation
  */
 export class N2KValidationError extends Error {
-  constructor(message: string, public readonly field?: string) {
-    super(message)
-    this.name = 'N2KValidationError'
+  constructor(
+    message: string,
+    public readonly field?: string
+  ) {
+    super(message);
+    this.name = "N2KValidationError";
   }
 }

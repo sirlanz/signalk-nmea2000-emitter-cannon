@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage } from '../types/index.js';
+import type { ConversionModule, N2KMessage } from "../types/index.js";
 
 interface Position {
   latitude?: number;
@@ -41,8 +41,8 @@ export default function createRouteWpListConversion(): ConversionModule {
         };
       });
 
-      const routeNameString = typeof routeName === 'string' ? routeName : "ACTIVE_ROUTE";
-      const isReverse = typeof reverse === 'boolean' ? reverse : false;
+      const routeNameString = typeof routeName === "string" ? routeName : "ACTIVE_ROUTE";
+      const isReverse = typeof reverse === "boolean" ? reverse : false;
 
       return [
         {
@@ -100,12 +100,8 @@ export default function createRouteWpListConversion(): ConversionModule {
             pgn: 130074,
             dst: 255,
             fields: {
-              startWp: 0,
-              nitems: 3,
               databaseId: 1,
-              routeId: 1,
-              navigationDirectionInRoute: "Forward",
-              routeName: "Baltimore Harbor Route",
+              nitems: 3,
               reserved: 0,
               list: [
                 {
@@ -113,27 +109,18 @@ export default function createRouteWpListConversion(): ConversionModule {
                   wpName: "START",
                   wpLatitude: 39.0458,
                   wpLongitude: -76.6413,
-                  wpBearingFromOrigin: 0,
-                  wpDistanceFromOrigin: 0,
-                  wpDescription: "Starting point",
                 },
                 {
                   wpId: 2,
                   wpName: "TURN1",
                   wpLatitude: 39.2904,
                   wpLongitude: -76.6122,
-                  wpBearingFromOrigin: 0.785,
-                  wpDistanceFromOrigin: 27130,
-                  wpDescription: "First turn",
                 },
                 {
                   wpId: 3,
                   wpName: "DEST",
                   wpLatitude: 39.3504,
                   wpLongitude: -76.5422,
-                  wpBearingFromOrigin: 1.047,
-                  wpDistanceFromOrigin: 35420,
-                  wpDescription: "Destination",
                 },
               ],
             },

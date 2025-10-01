@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage } from '../types/index.js';
+import type { ConversionModule, N2KMessage } from "../types/index.js";
 
 export default function createWindTrueGroundConversion(): ConversionModule {
   return {
@@ -6,7 +6,7 @@ export default function createWindTrueGroundConversion(): ConversionModule {
     optionKey: "WIND_TRUE_GROUND",
     keys: ["environment.wind.directionTrue", "environment.wind.speedOverGround"],
     callback: (angle: unknown, speed: unknown): N2KMessage[] => {
-      if (typeof angle !== 'number' || typeof speed !== 'number') {
+      if (typeof angle !== "number" || typeof speed !== "number") {
         return [];
       }
 

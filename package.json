@@ -1,7 +1,7 @@
 {
   "name": "sk-n2k-emitter",
-  "version": "1.1.1",
-  "description": "Signal K server plugin to convert Signal K to NMEA2000 with enhanced Garmin compatibility (92% PGN coverage)",
+  "version": "1.1.2",
+  "description": "Signal K server plugin to convert Signal K to NMEA2000 with Garmin PGN specification alignment and canboatjs framework compatibility",
   "main": "dist/index.js",
   "type": "module",
   "files": [

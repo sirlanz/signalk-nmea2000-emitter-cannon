@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage } from '../types/index.js';
+import type { ConversionModule, N2KMessage } from "../types/index.js";
 
 export default function createTransmissionParametersConversion(): ConversionModule {
   return {
@@ -25,7 +25,7 @@ export default function createTransmissionParametersConversion(): ConversionModu
 
       // Determine transmission gear based on gear ratio
       let transmissionGear = "Neutral";
-      if (typeof gearRatio === 'number') {
+      if (typeof gearRatio === "number") {
         if (gearRatio > 1) {
           transmissionGear = "Forward";
         } else if (gearRatio < 0) {
@@ -43,10 +43,10 @@ export default function createTransmissionParametersConversion(): ConversionModu
           fields: {
             engineInstance: 0,
             transmissionGear,
-            oilPressure: typeof oilPressure === 'number' ? oilPressure : undefined,
-            oilTemperature: typeof oilTemperature === 'number' ? oilTemperature : undefined,
-            discreteStatus1: typeof discreteStatus1 === 'number' ? discreteStatus1 : 0,
-            discreteStatus2: typeof discreteStatus2 === 'number' ? discreteStatus2 : 0,
+            oilPressure: typeof oilPressure === "number" ? oilPressure : undefined,
+            oilTemperature: typeof oilTemperature === "number" ? oilTemperature : undefined,
+            discreteStatus1: typeof discreteStatus1 === "number" ? discreteStatus1 : 0,
+            discreteStatus2: typeof discreteStatus2 === "number" ? discreteStatus2 : 0,
           },
         },
       ];
@@ -60,12 +60,10 @@ export default function createTransmissionParametersConversion(): ConversionModu
             pgn: 127493,
             dst: 255,
             fields: {
-              engineInstance: 0,
               transmissionGear: "Forward",
               oilPressure: 345000,
-              oilTemperature: 353.15,
+              oilTemperature: 353.1,
               discreteStatus1: 0,
-              discreteStatus2: 0,
             },
           },
         ],
@@ -78,12 +76,10 @@ export default function createTransmissionParametersConversion(): ConversionModu
             pgn: 127493,
             dst: 255,
             fields: {
-              engineInstance: 0,
               transmissionGear: "Reverse",
               oilPressure: 320000,
-              oilTemperature: 343.15,
+              oilTemperature: 343.1,
               discreteStatus1: 1,
-              discreteStatus2: 0,
             },
           },
         ],

@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage, N2KFieldValue } from '../types/index.js';
+import type { ConversionModule, N2KFieldValue, N2KMessage } from "../types/index.js";
 
 export default function createTimeToMarkConversion(): ConversionModule {
   return {
@@ -21,10 +21,10 @@ export default function createTimeToMarkConversion(): ConversionModule {
       };
 
       // Add conditional fields based on availability
-      if (typeof timeToGo === 'number') {
+      if (typeof timeToGo === "number") {
         fields.timeToMark = timeToGo;
       }
-      if (typeof timeSince === 'number') {
+      if (typeof timeSince === "number") {
         fields.timeSinceMark = timeSince;
       }
 
@@ -47,7 +47,7 @@ export default function createTimeToMarkConversion(): ConversionModule {
             dst: 255,
             fields: {
               sid: 0,
-              timeToMark: 1800,
+              timeToMark: "00:30:00",
               markType: "Waypoint",
             },
           },
@@ -62,8 +62,7 @@ export default function createTimeToMarkConversion(): ConversionModule {
             dst: 255,
             fields: {
               sid: 0,
-              timeSinceMark: 900,
-              markType: "Mark",
+              markType: "Collision",
             },
           },
         ],

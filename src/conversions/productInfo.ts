@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage } from '../types/index.js';
+import type { ConversionModule, N2KMessage } from "../types/index.js";
 
 export default function createProductInfoConversion(): ConversionModule {
   return {
@@ -33,10 +33,10 @@ export default function createProductInfoConversion(): ConversionModule {
           fields: {
             nmea2000Version: 2100, // NMEA 2000 version 2.1
             productCode: 12345, // Generic product code, could be made configurable
-            modelId: typeof modelNumber === 'string' ? modelNumber : "SignalK-NMEA2000",
-            softwareVersionCode: typeof softwareVersion === 'string' ? softwareVersion : "1.0.0",
-            modelVersion: typeof hardwareVersion === 'string' ? hardwareVersion : "1.0",
-            modelSerialCode: typeof serialNumber === 'string' ? serialNumber : "SK00000001",
+            modelId: typeof modelNumber === "string" ? modelNumber : "SignalK-NMEA2000",
+            softwareVersionCode: typeof softwareVersion === "string" ? softwareVersion : "1.0.0",
+            modelVersion: typeof hardwareVersion === "string" ? hardwareVersion : "1.0",
+            modelSerialCode: typeof serialNumber === "string" ? serialNumber : "SK00000001",
             certificationLevel: certificationLevel === "certified" ? "Level B" : "Level A",
             loadEquivalency: 1, // Standard load equivalency
           },
@@ -52,7 +52,7 @@ export default function createProductInfoConversion(): ConversionModule {
             pgn: 126996,
             dst: 255,
             fields: {
-              nmea2000Version: 2100,
+              nmea2000Version: 2.848,
               productCode: 12345,
               modelId: "SK-N2K-001",
               softwareVersionCode: "2.1.0",
@@ -72,7 +72,7 @@ export default function createProductInfoConversion(): ConversionModule {
             pgn: 126996,
             dst: 255,
             fields: {
-              nmea2000Version: 2100,
+              nmea2000Version: 2.848,
               productCode: 12345,
               modelId: "SignalK-NMEA2000",
               softwareVersionCode: "1.0.0",

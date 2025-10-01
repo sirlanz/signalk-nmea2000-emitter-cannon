@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage } from '../types/index.js';
+import type { ConversionModule, N2KMessage } from "../types/index.js";
 
 interface AlarmValue {
   state: string;
@@ -29,7 +29,7 @@ export default function createRaymarineAlarmsConversion(): ConversionModule {
     context: "vessels.self",
     sourceType: "subscription",
     callback: (delta: unknown): N2KMessage[] => {
-      if (!delta || typeof delta !== 'object') {
+      if (!delta || typeof delta !== "object") {
         return [];
       }
 
@@ -39,7 +39,11 @@ export default function createRaymarineAlarmsConversion(): ConversionModule {
       }
 
       const firstUpdate = deltaMsg.updates[0];
-      if (!firstUpdate?.values || !Array.isArray(firstUpdate.values) || firstUpdate.values.length === 0) {
+      if (
+        !firstUpdate?.values ||
+        !Array.isArray(firstUpdate.values) ||
+        firstUpdate.values.length === 0
+      ) {
         return [];
       }
 
@@ -61,7 +65,7 @@ export default function createRaymarineAlarmsConversion(): ConversionModule {
 
       let state: string | undefined;
       const method = value.method || [];
-      
+
       if (value.state === "normal") {
         if (method.indexOf("sound") !== -1) {
           state = "Alarm condition not met";

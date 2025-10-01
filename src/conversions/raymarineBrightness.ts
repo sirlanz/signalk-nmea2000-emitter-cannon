@@ -1,37 +1,36 @@
 import type {
   ConversionModule,
-  ConversionCallback,
+  PluginOptions,
   SignalKApp,
   SignalKPlugin,
-  PluginOptions,
   SubConversionModule,
-} from '../types/index.js'
+} from "../types/index.js";
 
 interface BrightnessGroup {
-  signalkId: string
-  instanceId: string
+  signalkId: string;
+  instanceId: string;
 }
 
 export default function createRaymarineBrightnessConversion(
-  app: SignalKApp,
-  plugin: SignalKPlugin,
+  _app: SignalKApp,
+  _plugin: SignalKPlugin
 ): ConversionModule {
   const conversions = (
-    options: PluginOptions['RAYMARINE_BRIGHTNESS'],
+    options: PluginOptions["RAYMARINE_BRIGHTNESS"]
   ): SubConversionModule<[number | null]>[] => {
-    const groups = options?.groups as BrightnessGroup[] | undefined
+    const groups = options?.groups as BrightnessGroup[] | undefined;
 
     if (!groups || !Array.isArray(groups) || groups.length === 0) {
-      return []
+      return [];
     }
 
     return groups.map((group: BrightnessGroup) => ({
       title: `Raymarine Display Brightness ${group.instanceId} (126720)`,
-      optionKey: 'RAYMARINE_BRIGHTNESS',
+      optionKey: "RAYMARINE_BRIGHTNESS",
       keys: [`electrical.displays.raymarine.${group.signalkId}.brightness`],
       callback: (brightness: number | null) => {
-        if (typeof brightness !== 'number') {
-          return []
+        if (typeof brightness !== "number") {
+          return [];
         }
 
         return [
@@ -40,17 +39,17 @@ export default function createRaymarineBrightnessConversion(
             pgn: 126720,
             dst: 255,
             fields: {
-              manufacturerCode: 'Raymarine',
-              industryCode: 'Marine Industry',
-              proprietaryId: '0x0c8c',
-              group: group.instanceId || 'Helm 2',
+              manufacturerCode: "Raymarine",
+              industryCode: "Marine Industry",
+              proprietaryId: "0x0c8c",
+              group: group.instanceId || "Helm 2",
               unknown1: 1,
-              command: 'Brightness',
+              command: "Brightness",
               brightness: (brightness || 0) * 100,
               unknown2: 0,
             },
           },
-        ]
+        ];
       },
       tests: [
         {
@@ -61,12 +60,12 @@ export default function createRaymarineBrightnessConversion(
               pgn: 126720,
               dst: 255,
               fields: {
-                manufacturerCode: 'Raymarine',
-                industryCode: 'Marine Industry',
-                proprietaryId: '0x0c8c',
-                group: 'Helm 2',
+                manufacturerCode: "Raymarine",
+                industryCode: "Marine Industry",
+                proprietaryId: "0x0c8c",
+                group: "Helm 2",
                 unknown1: 1,
-                command: 'Brightness',
+                command: "Brightness",
                 brightness: 85,
                 unknown2: 0,
               },
@@ -74,12 +73,12 @@ export default function createRaymarineBrightnessConversion(
           ],
         },
       ],
-    }))
-  }
+    }));
+  };
 
   return {
-    title: 'Raymarine Display Brightness (126720)',
-    optionKey: 'RAYMARINE_BRIGHTNESS',
+    title: "Raymarine Display Brightness (126720)",
+    optionKey: "RAYMARINE_BRIGHTNESS",
     conversions,
-  } as ConversionModule
+  } as ConversionModule;
 }

@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage } from '../types/index.js';
+import type { ConversionModule, N2KMessage } from "../types/index.js";
 
 interface Position {
   latitude?: number;
@@ -44,7 +44,7 @@ export default function createRouteWaypointConversion(): ConversionModule {
         }));
       }
 
-      const routeNameString = typeof routeName === 'string' ? routeName : "ACTIVE_ROUTE";
+      const routeNameString = typeof routeName === "string" ? routeName : "ACTIVE_ROUTE";
 
       return [
         {
@@ -82,7 +82,7 @@ export default function createRouteWaypointConversion(): ConversionModule {
             },
             {
               id: 2,
-              name: "WP002", 
+              name: "WP002",
               position: { latitude: 39.3504, longitude: -76.5422 },
             },
           ],
@@ -98,7 +98,7 @@ export default function createRouteWaypointConversion(): ConversionModule {
               databaseId: 1,
               routeId: 1,
               navigationDirectionInRoute: "Forward",
-              supplementaryRouteWpDataAvailable: "Yes",
+              supplementaryRouteWpDataAvailable: "Off",
               routeName: "Test Route",
               list: [
                 {

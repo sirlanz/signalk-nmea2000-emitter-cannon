@@ -103,3 +103,7 @@ logs/
 
 # Signal K specific
 .signalk/
+
+# Cline
+.clinefiles/
+.clinerules/

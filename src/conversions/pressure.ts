@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage } from '../types/index.js'
+import type { ConversionModule, N2KMessage } from "../types/index.js";
 
 /**
  * Create a pressure message for NMEA 2000
@@ -15,7 +15,7 @@ function createPressureMessage(pressure: number, source: string): N2KMessage[] {
         pressure,
       },
     },
-  ]
+  ];
 }
 
 /**
@@ -29,14 +29,14 @@ export default function createPressureConversions(): ConversionModule[] {
       keys: ["environment.outside.pressure"],
       callback: (pressure: unknown): N2KMessage[] => {
         try {
-          if (typeof pressure !== 'number') {
-            return []
+          if (typeof pressure !== "number") {
+            return [];
           }
 
-          return createPressureMessage(pressure, "Atmospheric")
+          return createPressureMessage(pressure, "Atmospheric");
         } catch (err) {
-          console.error('Error in atmospheric pressure conversion:', err)
-          return []
+          console.error("Error in atmospheric pressure conversion:", err);
+          return [];
         }
       },
 
@@ -90,5 +90,5 @@ export default function createPressureConversions(): ConversionModule[] {
         },
       ],
     },
-  ]
+  ];
 }

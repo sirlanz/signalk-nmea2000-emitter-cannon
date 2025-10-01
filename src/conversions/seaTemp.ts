@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage } from '../types/index.js'
+import type { ConversionModule, N2KMessage } from "../types/index.js";
 
 /**
  * Sea/Air Temperature conversion module - converts Signal K environmental data to NMEA 2000 PGN 130310
@@ -15,9 +15,9 @@ export default function createSeaTempConversion(): ConversionModule {
     callback: (water: unknown, air: unknown, pressure: unknown): N2KMessage[] => {
       try {
         // Validate inputs
-        const waterTemperature = typeof water === 'number' ? water : null
-        const outsideTemperature = typeof air === 'number' ? air : null
-        const atmosphericPressure = typeof pressure === 'number' ? pressure : null
+        const waterTemperature = typeof water === "number" ? water : null;
+        const outsideTemperature = typeof air === "number" ? air : null;
+        const atmosphericPressure = typeof pressure === "number" ? pressure : null;
 
         return [
           {
@@ -31,10 +31,10 @@ export default function createSeaTempConversion(): ConversionModule {
               atmosphericPressure,
             },
           },
-        ]
+        ];
       } catch (err) {
-        console.error('Error in sea/air temperature conversion:', err)
-        return []
+        console.error("Error in sea/air temperature conversion:", err);
+        return [];
       }
     },
 
@@ -55,5 +55,5 @@ export default function createSeaTempConversion(): ConversionModule {
         ],
       },
     ],
-  }
+  };
 }

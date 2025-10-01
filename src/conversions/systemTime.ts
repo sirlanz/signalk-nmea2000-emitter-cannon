@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage } from '../types/index.js'
+import type { ConversionModule, N2KMessage } from "../types/index.js";
 
 /**
  * System Time conversion module - converts current time to NMEA 2000 PGN 126992
@@ -11,10 +11,13 @@ export default function createSystemTimeConversion(): ConversionModule {
     optionKey: "SYSTEM_TIME",
     callback: (...values: unknown[]): N2KMessage[] => {
       try {
-        const inputDate = values[1] as Date | undefined
-        const dateObj = inputDate || new Date()
-        const date = Math.trunc(dateObj.getTime() / 86400 / 1000)
-        const time = dateObj.getUTCHours() * (60 * 60) + dateObj.getUTCMinutes() * 60 + dateObj.getUTCSeconds()
+        const inputDate = values[1] as Date | undefined;
+        const dateObj = inputDate || new Date();
+        const date = Math.trunc(dateObj.getTime() / 86400 / 1000);
+        const time =
+          dateObj.getUTCHours() * (60 * 60) +
+          dateObj.getUTCMinutes() * 60 +
+          dateObj.getUTCSeconds();
 
         return [
           {
@@ -26,10 +29,10 @@ export default function createSystemTimeConversion(): ConversionModule {
               time,
             },
           },
-        ]
+        ];
       } catch (err) {
-        console.error('Error in system time conversion:', err)
-        return []
+        console.error("Error in system time conversion:", err);
+        return [];
       }
     },
 
@@ -49,5 +52,5 @@ export default function createSystemTimeConversion(): ConversionModule {
         ],
       },
     ],
-  }
+  };
 }

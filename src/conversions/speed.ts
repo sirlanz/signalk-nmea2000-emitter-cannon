@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage } from '../types/index.js'
+import type { ConversionModule, N2KMessage } from "../types/index.js";
 
 /**
  * Speed conversion module - converts Signal K speed through water to NMEA 2000 PGN 128259
@@ -11,8 +11,8 @@ export default function createSpeedConversion(): ConversionModule {
     callback: (speed: unknown): N2KMessage[] => {
       try {
         // Validate input
-        if (typeof speed !== 'number') {
-          return []
+        if (typeof speed !== "number") {
+          return [];
         }
 
         return [
@@ -21,13 +21,14 @@ export default function createSpeedConversion(): ConversionModule {
             pgn: 128259,
             dst: 255,
             fields: {
+              sid: 87,
               speedWaterReferenced: speed,
             },
           },
-        ]
+        ];
       } catch (err) {
-        console.error('Error in speed conversion:', err)
-        return []
+        console.error("Error in speed conversion:", err);
+        return [];
       }
     },
 
@@ -40,6 +41,7 @@ export default function createSpeedConversion(): ConversionModule {
             pgn: 128259,
             dst: 255,
             fields: {
+              sid: 87,
               speedWaterReferenced: 3,
             },
           },
@@ -54,6 +56,7 @@ export default function createSpeedConversion(): ConversionModule {
             pgn: 128259,
             dst: 255,
             fields: {
+              sid: 87,
               speedWaterReferenced: 2.5,
             },
           },
@@ -68,11 +71,12 @@ export default function createSpeedConversion(): ConversionModule {
             pgn: 128259,
             dst: 255,
             fields: {
+              sid: 87,
               speedWaterReferenced: 0,
             },
           },
         ],
       },
     ],
-  }
+  };
 }

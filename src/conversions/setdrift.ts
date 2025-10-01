@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage } from '../types/index.js'
+import type { ConversionModule, N2KMessage } from "../types/index.js";
 
 /**
  * Set/Drift conversion module - converts Signal K current data to NMEA 2000 PGN 129291
@@ -11,12 +11,12 @@ export default function createSetDriftConversion(): ConversionModule {
     callback: (set: unknown, drift: unknown): N2KMessage[] => {
       try {
         // Validate inputs - both set and drift should be numbers
-        const setValue = typeof set === 'number' ? set : null
-        const driftValue = typeof drift === 'number' ? drift : null
+        const setValue = typeof set === "number" ? set : null;
+        const driftValue = typeof drift === "number" ? drift : null;
 
         // Return empty array if no current data available
         if (setValue === null && driftValue === null) {
-          return []
+          return [];
         }
 
         return [
@@ -30,10 +30,10 @@ export default function createSetDriftConversion(): ConversionModule {
               setReference: "True",
             },
           },
-        ]
+        ];
       } catch (err) {
-        console.error('Error in set/drift conversion:', err)
-        return []
+        console.error("Error in set/drift conversion:", err);
+        return [];
       }
     },
 
@@ -69,5 +69,5 @@ export default function createSetDriftConversion(): ConversionModule {
         ],
       },
     ],
-  }
+  };
 }

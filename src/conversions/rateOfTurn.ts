@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage } from '../types/index.js'
+import type { ConversionModule, N2KMessage } from "../types/index.js";
 
 /**
  * Rate of Turn conversion module - converts Signal K rate of turn to NMEA 2000 PGN 127251
@@ -11,8 +11,8 @@ export default function createRateOfTurnConversion(): ConversionModule {
     callback: (rateOfTurn: unknown): N2KMessage[] => {
       try {
         // Validate rate of turn input - required field
-        if (typeof rateOfTurn !== 'number') {
-          return []
+        if (typeof rateOfTurn !== "number") {
+          return [];
         }
 
         return [
@@ -26,10 +26,10 @@ export default function createRateOfTurnConversion(): ConversionModule {
               reserved: 16777215,
             },
           },
-        ]
+        ];
       } catch (err) {
-        console.error('Error in rate of turn conversion:', err)
-        return []
+        console.error("Error in rate of turn conversion:", err);
+        return [];
       }
     },
 
@@ -65,5 +65,5 @@ export default function createRateOfTurnConversion(): ConversionModule {
         ],
       },
     ],
-  }
+  };
 }

@@ -1,29 +1,27 @@
 import type {
-  ConversionModule,
-  N2KMessage,
-  JSONSchema,
-  SubConversionModule,
-  SignalKApp,
-  SignalKPlugin,
   ConversionCallback,
-} from '../types/index.js'
+  ConversionModule,
+  JSONSchema,
+  SignalKApp,
+  SubConversionModule,
+} from "../types/index.js";
 
-const DEFAULT_TIMEOUT = 10000 // ms
+const DEFAULT_TIMEOUT = 10000; // ms
 
 /**
  * Engine configuration for exhaust temperature
  */
 interface ExhaustTempEngineConfig {
-  signalkId: string | number
-  tempInstanceId: number
+  signalkId: string | number;
+  tempInstanceId: number;
 }
 
 /**
  * Engine configuration for parameters
  */
 interface EngineConfig {
-  signalkId: string | number
-  instanceId: number
+  signalkId: string | number;
+  instanceId: number;
 }
 
 /**
@@ -31,54 +29,54 @@ interface EngineConfig {
  */
 interface EngineParametersOptions {
   EXHAUST_TEMPERATURE?: {
-    engines: ExhaustTempEngineConfig[]
-  }
+    engines: ExhaustTempEngineConfig[];
+  };
   ENGINE_PARAMETERS?: {
-    engines: EngineConfig[]
-  }
+    engines: EngineConfig[];
+  };
 }
 
 /**
  * Engine parameters conversion modules - converts Signal K propulsion data to NMEA 2000 PGNs
  */
 export default function createEngineParametersConversions(
-  app: SignalKApp,
+  app: SignalKApp
 ): ConversionModule<any>[] {
   // discrete status fields are not yet implemented
   const engParKeys = [
-    'oilPressure',
-    'oilTemperature',
-    'temperature',
-    'alternatorVoltage',
-    'fuel.rate',
-    'runTime',
-    'coolantPressure',
-    'fuel.pressure',
-    'engineLoad',
-    'engineTorque',
-  ]
+    "oilPressure",
+    "oilTemperature",
+    "temperature",
+    "alternatorVoltage",
+    "fuel.rate",
+    "runTime",
+    "coolantPressure",
+    "fuel.pressure",
+    "engineLoad",
+    "engineTorque",
+  ];
 
-  const engRapidKeys = ['revolutions', 'boostPressure', 'drive.trimState']
+  const engRapidKeys = ["revolutions", "boostPressure", "drive.trimState"];
 
   return [
     {
-      title: 'Temperature, exhaust (130312)',
-      optionKey: 'EXHAUST_TEMPERATURE',
-      context: 'vessels.self',
-      properties: (): JSONSchema['properties'] => ({
+      title: "Temperature, exhaust (130312)",
+      optionKey: "EXHAUST_TEMPERATURE",
+      context: "vessels.self",
+      properties: (): JSONSchema["properties"] => ({
         engines: {
-          title: 'Engine Mapping',
-          type: 'array',
+          title: "Engine Mapping",
+          type: "array",
           items: {
-            type: 'object',
+            type: "object",
             properties: {
               signalkId: {
-                title: 'Signal K engine id',
-                type: 'string',
+                title: "Signal K engine id",
+                type: "string",
               },
               tempInstanceId: {
-                title: 'NMEA2000 Temperature Instance Id',
-                type: 'number',
+                title: "NMEA2000 Temperature Instance Id",
+                type: "number",
               },
             },
           },
@@ -97,17 +95,17 @@ export default function createEngineParametersConversions(
       },
 
       conversions: (options: unknown) => {
-        const engineOptions = options as EngineParametersOptions
+        const engineOptions = options as EngineParametersOptions;
         if (!engineOptions?.EXHAUST_TEMPERATURE?.engines) {
-          return null
+          return null;
         }
 
         return engineOptions.EXHAUST_TEMPERATURE?.engines.map((engine) => ({
           keys: [`propulsion.${engine.signalkId}.exhaustTemperature`],
           callback: ((temperature: number | null) => {
             try {
-              if (typeof temperature !== 'number') {
-                return []
+              if (typeof temperature !== "number") {
+                return [];
               }
 
               return [
@@ -118,13 +116,13 @@ export default function createEngineParametersConversions(
                   fields: {
                     instance: engine.tempInstanceId,
                     actualTemperature: temperature,
-                    source: 'Exhaust Gas Temperature',
+                    source: "Exhaust Gas Temperature",
                   },
                 },
-              ]
+              ];
             } catch (err) {
-              app.error(err as Error)
-              return []
+              app.error(err as Error);
+              return [];
             }
           }) as ConversionCallback<[number | null]>,
           tests: [
@@ -138,33 +136,33 @@ export default function createEngineParametersConversions(
                   fields: {
                     instance: 1,
                     actualTemperature: 281.2,
-                    source: 'Exhaust Gas Temperature',
+                    source: "Exhaust Gas Temperature",
                   },
                 },
               ],
             },
           ],
-        }))
+        }));
       },
     },
     {
-      title: 'Engine Parameters (127489,127488)',
-      optionKey: 'ENGINE_PARAMETERS',
-      context: 'vessels.self',
-      properties: (): JSONSchema['properties'] => ({
+      title: "Engine Parameters (127489,127488)",
+      optionKey: "ENGINE_PARAMETERS",
+      context: "vessels.self",
+      properties: (): JSONSchema["properties"] => ({
         engines: {
-          title: 'Engine Mapping',
-          type: 'array',
+          title: "Engine Mapping",
+          type: "array",
           items: {
-            type: 'object',
+            type: "object",
             properties: {
               signalkId: {
-                title: 'Signal K engine id',
-                type: 'string',
+                title: "Signal K engine id",
+                type: "string",
               },
               instanceId: {
-                title: 'NMEA2000 Engine Instance Id',
-                type: 'number',
+                title: "NMEA2000 Engine Instance Id",
+                type: "number",
               },
             },
           },
@@ -183,9 +181,9 @@ export default function createEngineParametersConversions(
       },
 
       conversions: (options: unknown) => {
-        const engineOptions = options as EngineParametersOptions
+        const engineOptions = options as EngineParametersOptions;
         if (!engineOptions?.ENGINE_PARAMETERS?.engines) {
-          return null
+          return null;
         }
 
         const dyn = engineOptions.ENGINE_PARAMETERS?.engines.map((engine) => ({
@@ -201,21 +199,21 @@ export default function createEngineParametersConversions(
             coolPres: number | null,
             fuelPres: number | null,
             engLoad: number | null,
-            engTorque: number | null,
+            engTorque: number | null
           ) => {
             try {
               // Convert and validate inputs
-              const oilPressure = typeof oilPres === 'number' ? oilPres / 100 : null
-              const oilTemperature = typeof oilTemp === 'number' ? oilTemp : null
-              const temperature = typeof temp === 'number' ? temp : null
-              const alternatorPotential = typeof altVolt === 'number' ? altVolt : null
+              const oilPressure = typeof oilPres === "number" ? oilPres / 100 : null;
+              const oilTemperature = typeof oilTemp === "number" ? oilTemp : null;
+              const temperature = typeof temp === "number" ? temp : null;
+              const alternatorPotential = typeof altVolt === "number" ? altVolt : null;
               const fuelRateConverted =
-                typeof fuelRate === 'number' ? fuelRate * 3600 * 1000 : null
-              const totalEngineHours = typeof runTime === 'number' ? runTime : null
-              const coolantPressure = typeof coolPres === 'number' ? coolPres / 100 : null
-              const fuelPressure = typeof fuelPres === 'number' ? fuelPres / 100 : null
-              const engineLoad = typeof engLoad === 'number' ? engLoad * 100 : null
-              const engineTorque = typeof engTorque === 'number' ? engTorque * 100 : null
+                typeof fuelRate === "number" ? fuelRate * 3600 * 1000 : null;
+              const totalEngineHours = typeof runTime === "number" ? runTime : null;
+              const coolantPressure = typeof coolPres === "number" ? coolPres / 100 : null;
+              const fuelPressure = typeof fuelPres === "number" ? fuelPres / 100 : null;
+              const engineLoad = typeof engLoad === "number" ? engLoad * 100 : null;
+              const engineTorque = typeof engTorque === "number" ? engTorque * 100 : null;
 
               return [
                 {
@@ -238,10 +236,10 @@ export default function createEngineParametersConversions(
                     engineTorque,
                   },
                 },
-              ]
+              ];
             } catch (err) {
-              app.error(err as Error)
-              return []
+              app.error(err as Error);
+              return [];
             }
           }) as ConversionCallback<
             [
@@ -266,13 +264,13 @@ export default function createEngineParametersConversions(
                   pgn: 127489,
                   dst: 255,
                   fields: {
-                    instance: 'Dual Engine Starboard',
+                    instance: "Dual Engine Starboard",
                     oilPressure: 1000,
                     oilTemperature: 210,
                     temperature: 220,
                     alternatorPotential: 13.1,
                     fuelRate: -2355.2,
-                    totalEngineHours: '55:52:03',
+                    totalEngineHours: "55:52:03",
                     coolantPressure: 2000,
                     fuelPressure: 111000,
                     discreteStatus1: [],
@@ -284,7 +282,7 @@ export default function createEngineParametersConversions(
               ],
             },
           ],
-        }))
+        }));
 
         const rapid = engineOptions.ENGINE_PARAMETERS?.engines.map((engine) => ({
           keys: engRapidKeys.map((key) => `propulsion.${engine.signalkId}.${key}`),
@@ -292,13 +290,13 @@ export default function createEngineParametersConversions(
           callback: ((
             revolutions: number | null,
             boostPressure: number | null,
-            trimState: number | null,
+            trimState: number | null
           ) => {
             try {
               // Convert and validate inputs
-              const speed = typeof revolutions === 'number' ? revolutions * 60 : null
-              const boostPres = typeof boostPressure === 'number' ? boostPressure / 100 : null
-              const tiltTrim = typeof trimState === 'number' ? trimState * 100 : null
+              const speed = typeof revolutions === "number" ? revolutions * 60 : null;
+              const boostPres = typeof boostPressure === "number" ? boostPressure / 100 : null;
+              const tiltTrim = typeof trimState === "number" ? trimState * 100 : null;
 
               return [
                 {
@@ -312,10 +310,10 @@ export default function createEngineParametersConversions(
                     tiltTrim,
                   },
                 },
-              ]
+              ];
             } catch (err) {
-              app.error(err as Error)
-              return []
+              app.error(err as Error);
+              return [];
             }
           }) as ConversionCallback<[number | null, number | null, number | null]>,
           tests: [
@@ -327,7 +325,7 @@ export default function createEngineParametersConversions(
                   pgn: 127488,
                   dst: 255,
                   fields: {
-                    instance: 'Dual Engine Starboard',
+                    instance: "Dual Engine Starboard",
                     speed: 10908,
                     boostPressure: 200,
                     tiltTrim: 50,
@@ -336,10 +334,10 @@ export default function createEngineParametersConversions(
               ],
             },
           ],
-        }))
+        }));
 
-        return [...dyn, ...rapid] as SubConversionModule<any>[]
+        return [...dyn, ...rapid] as SubConversionModule<any>[];
       },
     },
-  ]
+  ];
 }

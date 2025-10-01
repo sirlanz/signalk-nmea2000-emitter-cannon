@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage, SignalKApp, JSONSchema } from '../types/index.js'
+import type { ConversionModule, JSONSchema, N2KMessage, SignalKApp } from "../types/index.js";
 
 /**
  * Tank type mapping from Signal K to NMEA 2000
@@ -13,14 +13,14 @@ const typeMapping: Record<string, string> = {
   liveWell: "Live well",
   lubrication: "Oil",
   gas: "Fuel",
-}
+};
 
 /**
  * Tank configuration interface
  */
 interface TankConfig {
-  signalkPath: string
-  instanceId: number
+  signalkPath: string;
+  instanceId: number;
 }
 
 /**
@@ -28,8 +28,8 @@ interface TankConfig {
  */
 interface TankOptions {
   TANKS: {
-    tanks: TankConfig[]
-  }
+    tanks: TankConfig[];
+  };
 }
 
 /**
@@ -40,21 +40,21 @@ export default function createTanksConversion(app: SignalKApp): ConversionModule
     title: "Tank Levels (127505)",
     optionKey: "TANKS",
     context: "vessels.self",
-    properties: (): JSONSchema['properties'] | undefined => {
+    properties: (): JSONSchema["properties"] | undefined => {
       // Get tanks from Signal K self vessel data
-      const self = app.getSelfPath('') as Record<string, unknown> | undefined
-      const tanks = self?.tanks as Record<string, unknown> | undefined
-      const tankPaths: string[] = []
-      
-      if (tanks && typeof tanks === 'object') {
+      const self = app.getSelfPath("") as Record<string, unknown> | undefined;
+      const tanks = self?.tanks as Record<string, unknown> | undefined;
+      const tankPaths: string[] = [];
+
+      if (tanks && typeof tanks === "object") {
         Object.keys(tanks).forEach((type) => {
-          const tankType = tanks[type] as Record<string, unknown> | undefined
-          if (tankType && typeof tankType === 'object') {
+          const tankType = tanks[type] as Record<string, unknown> | undefined;
+          if (tankType && typeof tankType === "object") {
             Object.keys(tankType).forEach((instance) => {
-              tankPaths.push(`tanks.${type}.${instance}`)
-            })
+              tankPaths.push(`tanks.${type}.${instance}`);
+            });
           }
-        })
+        });
       }
 
       return tankPaths.length === 0
@@ -78,7 +78,7 @@ export default function createTanksConversion(app: SignalKApp): ConversionModule
                 },
               },
             },
-          }
+          };
     },
 
     testOptions: {
@@ -93,23 +93,23 @@ export default function createTanksConversion(app: SignalKApp): ConversionModule
     },
 
     conversions: (options: unknown) => {
-      const tankOptions = options as TankOptions
+      const tankOptions = options as TankOptions;
       if (!tankOptions?.TANKS?.tanks) {
-        return null
+        return null;
       }
 
       const validConversions = tankOptions.TANKS.tanks.map((tank) => {
-        const split = tank.signalkPath.split(".")
-        const tankType = split[1]
-        
+        const split = tank.signalkPath.split(".");
+        const tankType = split[1];
+
         if (!tankType) {
-          const msg = `Invalid tank path: ${tank.signalkPath}`
-          app.error(msg)
-          return null
+          const msg = `Invalid tank path: ${tank.signalkPath}`;
+          app.error(msg);
+          return null;
         }
-        
-        const type = typeMapping[tankType]
-        
+
+        const type = typeMapping[tankType];
+
         if (type) {
           return {
             keys: [`${tank.signalkPath}.currentLevel`, `${tank.signalkPath}.capacity`],
@@ -117,11 +117,11 @@ export default function createTanksConversion(app: SignalKApp): ConversionModule
             callback: (currentLevel: unknown, capacity: unknown): N2KMessage[] => {
               try {
                 // Validate inputs
-                const level = typeof currentLevel === 'number' ? currentLevel : null
-                const cap = typeof capacity === 'number' ? capacity : null
+                const level = typeof currentLevel === "number" ? currentLevel : null;
+                const cap = typeof capacity === "number" ? capacity : null;
 
                 if (level === null && cap === null) {
-                  return []
+                  return [];
                 }
 
                 return [
@@ -136,10 +136,10 @@ export default function createTanksConversion(app: SignalKApp): ConversionModule
                       capacity: cap !== null ? cap * 1000 : null,
                     },
                   },
-                ]
+                ];
               } catch (err) {
-                console.error('Error in tank conversion:', err)
-                return []
+                console.error("Error in tank conversion:", err);
+                return [];
               }
             },
             tests: [
@@ -160,15 +160,15 @@ export default function createTanksConversion(app: SignalKApp): ConversionModule
                 ],
               },
             ],
-          }
+          };
         } else {
-          const msg = `unknown tank type: ${tankType}`
-          app.error(msg)
-          return null
+          const msg = `unknown tank type: ${tankType}`;
+          app.error(msg);
+          return null;
         }
-      })
+      });
 
-      return validConversions.filter((conv): conv is NonNullable<typeof conv> => conv !== null)
+      return validConversions.filter((conv): conv is NonNullable<typeof conv> => conv !== null);
     },
-  }
+  };
 }

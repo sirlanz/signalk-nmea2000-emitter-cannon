@@ -1,16 +1,10 @@
-import type {
-  ConversionModule,
-  N2KMessage,
-  SignalKApp,
-  SignalKPlugin,
-  ConversionCallback,
-} from '../types/index.js'
+import type { ConversionCallback, ConversionModule, SignalKApp } from "../types/index.js";
 
 /**
  * Direction Data conversion module - converts Signal K navigation directions to NMEA 2000 PGN 130577
  */
 export default function createDirectionDataConversion(
-  app: SignalKApp,
+  app: SignalKApp
 ): ConversionModule<
   [
     number | null,
@@ -24,17 +18,17 @@ export default function createDirectionDataConversion(
   ]
 > {
   return {
-    title: 'Direction Data (130577)',
-    optionKey: 'DIRECTION_DATA',
+    title: "Direction Data (130577)",
+    optionKey: "DIRECTION_DATA",
     keys: [
-      'navigation.courseOverGroundTrue',
-      'navigation.courseOverGroundMagnetic',
-      'navigation.headingTrue',
-      'navigation.headingMagnetic',
-      'navigation.courseRhumbline.nextPoint.bearingTrue',
-      'navigation.courseRhumbline.nextPoint.bearingMagnetic',
-      'navigation.courseGreatCircle.nextPoint.bearingTrue',
-      'navigation.courseGreatCircle.nextPoint.bearingMagnetic',
+      "navigation.courseOverGroundTrue",
+      "navigation.courseOverGroundMagnetic",
+      "navigation.headingTrue",
+      "navigation.headingMagnetic",
+      "navigation.courseRhumbline.nextPoint.bearingTrue",
+      "navigation.courseRhumbline.nextPoint.bearingMagnetic",
+      "navigation.courseGreatCircle.nextPoint.bearingTrue",
+      "navigation.courseGreatCircle.nextPoint.bearingMagnetic",
     ],
     callback: ((
       cogTrue: number | null,
@@ -44,7 +38,7 @@ export default function createDirectionDataConversion(
       _rhumbBearingTrue: number | null,
       _rhumbBearingMagnetic: number | null,
       _gcBearingTrue: number | null,
-      _gcBearingMagnetic: number | null,
+      _gcBearingMagnetic: number | null
     ) => {
       try {
         // Send direction data if we have at least one direction value
@@ -54,7 +48,7 @@ export default function createDirectionDataConversion(
           headingTrue === null &&
           headingMagnetic === null
         ) {
-          return []
+          return [];
         }
 
         return [
@@ -63,37 +57,33 @@ export default function createDirectionDataConversion(
             pgn: 130577,
             dst: 255,
             fields: {
-              dataMode: 'Autonomous', // Could be made configurable
+              dataMode: "Autonomous", // Could be made configurable
               cogReference:
-                cogTrue !== null
-                  ? 'True'
-                  : cogMagnetic !== null
-                  ? 'Magnetic'
-                  : 'Unavailable',
+                cogTrue !== null ? "True" : cogMagnetic !== null ? "Magnetic" : "Unavailable",
               sidForCog: 0,
               cog: cogTrue || cogMagnetic,
-              sogReference: 'Unavailable', // Would need SOG data source info
+              sogReference: "Unavailable", // Would need SOG data source info
               sidForSog: 0,
               sog: null, // This PGN focuses on direction, not speed
               headingReference:
                 headingTrue !== null
-                  ? 'True'
+                  ? "True"
                   : headingMagnetic !== null
-                  ? 'Magnetic'
-                  : 'Unavailable',
+                    ? "Magnetic"
+                    : "Unavailable",
               sidForHeading: 0,
               heading: headingTrue || headingMagnetic,
-              speedThroughWaterReference: 'Unavailable',
+              speedThroughWaterReference: "Unavailable",
               sidForStw: 0,
               speedThroughWater: null,
               set: null, // Current set - not typically available
               drift: null, // Current drift - not typically available
             },
           },
-        ]
+        ];
       } catch (err) {
-        app.error(err as Error)
-        return []
+        app.error(err as Error);
+        return [];
       }
     }) as ConversionCallback<
       [
@@ -118,8 +108,8 @@ export default function createDirectionDataConversion(
             dst: 255,
             fields: {
               cog: 1.571,
-              cogReference: 'True',
-              dataMode: 'Autonomous',
+              cogReference: "True",
+              dataMode: "Autonomous",
               heading: 1.396,
             },
           },
@@ -134,13 +124,13 @@ export default function createDirectionDataConversion(
             dst: 255,
             fields: {
               cog: 1.047,
-              cogReference: 'Magnetic',
-              dataMode: 'Autonomous',
+              cogReference: "Magnetic",
+              dataMode: "Autonomous",
               heading: 0.698,
             },
           },
         ],
       },
     ],
-  }
+  };
 }

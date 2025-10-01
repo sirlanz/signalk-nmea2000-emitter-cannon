@@ -1,4 +1,4 @@
-import type { ConversionModule, N2KMessage } from '../types/index.js';
+import type { ConversionModule, N2KMessage } from "../types/index.js";
 
 export default function createPgnListConversion(): ConversionModule {
   return {
@@ -58,7 +58,7 @@ export default function createPgnListConversion(): ConversionModule {
           dst: 255,
           fields: {
             functionCode: "Transmit PGN list",
-            list: transmitPGNs,
+            list: transmitPGNs.map((pgn) => ({ pgn })),
           },
         },
         {
@@ -67,7 +67,7 @@ export default function createPgnListConversion(): ConversionModule {
           dst: 255,
           fields: {
             functionCode: "Receive PGN list",
-            list: receivePGNs,
+            list: receivePGNs.map((pgn) => ({ pgn })),
           },
         },
       ];
@@ -83,10 +83,42 @@ export default function createPgnListConversion(): ConversionModule {
             fields: {
               functionCode: "Transmit PGN list",
               list: [
-                59392, 59904, 60928, 126996, 126464, 127245, 127258, 127488, 127489, 127493, 127498,
-                127506, 127508, 128259, 128267, 128275, 129025, 129026, 129029, 129033, 129038,
-                129039, 129040, 129041, 129283, 129285, 129539, 129540, 129794, 129798, 129799,
-                129802, 129808, 130306, 130312, 130576,
+                { pgn: 59392 },
+                { pgn: 59904 },
+                { pgn: 60928 },
+                { pgn: 126996 },
+                { pgn: 126464 },
+                { pgn: 127245 },
+                { pgn: 127258 },
+                { pgn: 127488 },
+                { pgn: 127489 },
+                { pgn: 127493 },
+                { pgn: 127498 },
+                { pgn: 127506 },
+                { pgn: 127508 },
+                { pgn: 128259 },
+                { pgn: 128267 },
+                { pgn: 128275 },
+                { pgn: 129025 },
+                { pgn: 129026 },
+                { pgn: 129029 },
+                { pgn: 129033 },
+                { pgn: 129038 },
+                { pgn: 129039 },
+                { pgn: 129040 },
+                { pgn: 129041 },
+                { pgn: 129283 },
+                { pgn: 129285 },
+                { pgn: 129539 },
+                { pgn: 129540 },
+                { pgn: 129794 },
+                { pgn: 129798 },
+                { pgn: 129799 },
+                { pgn: 129802 },
+                { pgn: 129808 },
+                { pgn: 130306 },
+                { pgn: 130312 },
+                { pgn: 130576 },
               ],
             },
           },
@@ -96,7 +128,7 @@ export default function createPgnListConversion(): ConversionModule {
             dst: 255,
             fields: {
               functionCode: "Receive PGN list",
-              list: [59904, 126464],
+              list: [{ pgn: 59904 }, { pgn: 126464 }],
             },
           },
         ],

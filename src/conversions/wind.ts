@@ -1,28 +1,23 @@
-import type {
-  ConversionModule,
-  ConversionCallback,
-  SignalKApp,
-  SignalKPlugin,
-} from '../types/index.js'
+import type { ConversionCallback, ConversionModule, SignalKApp } from "../types/index.js";
 
 /**
  * Wind conversion module - converts Signal K wind data to NMEA 2000 PGN 130306
  */
 export default function createWindConversion(
-  app: SignalKApp,
+  app: SignalKApp
 ): ConversionModule<[number | null, number | null]> {
   return {
-    title: 'Wind (130306)',
-    optionKey: 'WIND',
-    keys: ['environment.wind.angleApparent', 'environment.wind.speedApparent'],
+    title: "Wind (130306)",
+    optionKey: "WIND",
+    keys: ["environment.wind.angleApparent", "environment.wind.speedApparent"],
     callback: ((angle: number | null, speed: number | null) => {
       try {
         if (angle === null && speed === null) {
-          return []
+          return [];
         }
 
         // Convert negative angles to positive (0-2π range)
-        const normalizedAngle = angle !== null && angle < 0 ? angle + Math.PI * 2 : angle
+        const normalizedAngle = angle !== null && angle < 0 ? angle + Math.PI * 2 : angle;
 
         return [
           {
@@ -30,15 +25,16 @@ export default function createWindConversion(
             pgn: 130306,
             dst: 255,
             fields: {
+              sid: 87,
               windSpeed: speed,
               windAngle: normalizedAngle,
-              reference: 'Apparent',
+              reference: "Apparent",
             },
           },
-        ]
+        ];
       } catch (err) {
-        app.error(err as Error)
-        return []
+        app.error(err as Error);
+        return [];
       }
     }) as ConversionCallback<[number | null, number | null]>,
 
@@ -51,9 +47,10 @@ export default function createWindConversion(
             pgn: 130306,
             dst: 255,
             fields: {
+              sid: 87,
               windSpeed: 1.2,
               windAngle: 2.0944,
-              reference: 'Apparent',
+              reference: "Apparent",
             },
           },
         ],
@@ -66,9 +63,10 @@ export default function createWindConversion(
             pgn: 130306,
             dst: 255,
             fields: {
+              sid: 87,
               windSpeed: 1.5,
-              windAngle: 4.1887902047863905,
-              reference: 'Apparent',
+              windAngle: 4.1888,
+              reference: "Apparent",
             },
           },
         ],
@@ -82,13 +80,13 @@ export default function createWindConversion(
             pgn: 130306,
             dst: 255,
             fields: {
+              sid: 87,
               windSpeed: 0,
-              windAngle: null,
-              reference: 'Apparent',
+              reference: "Apparent",
             },
           },
         ],
       },
     ],
-  }
+  };
 }

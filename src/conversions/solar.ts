@@ -1,12 +1,12 @@
-import type { ConversionModule, N2KMessage, JSONSchema } from '../types/index.js'
+import type { ConversionModule, JSONSchema, N2KMessage } from "../types/index.js";
 
 /**
  * Solar charger configuration interface
  */
 interface SolarChargerConfig {
-  signalkId: string
-  instanceId: number
-  panelInstanceId: number
+  signalkId: string;
+  instanceId: number;
+  panelInstanceId: number;
 }
 
 /**
@@ -14,21 +14,21 @@ interface SolarChargerConfig {
  */
 interface SolarOptions {
   SOLAR: {
-    chargers: SolarChargerConfig[]
-  }
+    chargers: SolarChargerConfig[];
+  };
 }
 
 /**
  * Solar conversion module - converts Signal K solar data to NMEA 2000 battery PGNs 127506 & 127508
  */
 export default function createSolarConversion(): ConversionModule {
-  const solarKeys = ["voltage", "current", "panelCurrent", "panelVoltage"]
+  const solarKeys = ["voltage", "current", "panelCurrent", "panelVoltage"];
 
   return {
     title: "Solar as Battery (127506 & 127508)",
     optionKey: "SOLAR",
     context: "vessels.self",
-    properties: (): JSONSchema['properties'] => ({
+    properties: (): JSONSchema["properties"] => ({
       chargers: {
         title: "Solar Mapping",
         type: "array",
@@ -68,9 +68,9 @@ export default function createSolarConversion(): ConversionModule {
     },
 
     conversions: (options: unknown) => {
-      const solarOptions = options as SolarOptions
+      const solarOptions = options as SolarOptions;
       if (!solarOptions?.SOLAR?.chargers) {
-        return null
+        return null;
       }
 
       return solarOptions.SOLAR.chargers.map((charger) => ({
@@ -83,13 +83,13 @@ export default function createSolarConversion(): ConversionModule {
           panelVoltage: unknown
         ): N2KMessage[] => {
           try {
-            const res: N2KMessage[] = []
-            
+            const res: N2KMessage[] = [];
+
             // Convert and validate inputs
-            const voltageValue = typeof voltage === 'number' ? voltage : null
-            const currentValue = typeof current === 'number' ? current : null
-            const panelCurrentValue = typeof panelCurrent === 'number' ? panelCurrent : null
-            const panelVoltageValue = typeof panelVoltage === 'number' ? panelVoltage : null
+            const voltageValue = typeof voltage === "number" ? voltage : null;
+            const currentValue = typeof current === "number" ? current : null;
+            const panelCurrentValue = typeof panelCurrent === "number" ? panelCurrent : null;
+            const panelVoltageValue = typeof panelVoltage === "number" ? panelVoltage : null;
 
             // Solar charger output (battery instance)
             if (voltageValue !== null || currentValue !== null) {
@@ -102,7 +102,7 @@ export default function createSolarConversion(): ConversionModule {
                   voltage: voltageValue,
                   current: currentValue,
                 },
-              })
+              });
             }
 
             // Solar panel input (panel instance)
@@ -116,13 +116,13 @@ export default function createSolarConversion(): ConversionModule {
                   voltage: panelVoltageValue,
                   current: panelCurrentValue,
                 },
-              })
+              });
             }
 
-            return res
+            return res;
           } catch (err) {
-            console.error('Error in solar conversion:', err)
-            return []
+            console.error("Error in solar conversion:", err);
+            return [];
           }
         },
         tests: [
@@ -152,7 +152,7 @@ export default function createSolarConversion(): ConversionModule {
             ],
           },
         ],
-      }))
+      }));
     },
-  }
+  };
 }
