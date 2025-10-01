@@ -144,18 +144,22 @@ export default function createBatteryConversion(
               }
             }
 
-            if (
-              remainingC !== null &&
-              dischargeCurrentA !== null &&
-              Number.isFinite(remainingC) &&
-              Number.isFinite(dischargeCurrentA) &&
-              dischargeCurrentA > 0
-            ) {
-              let seconds = Math.round(remainingC / dischargeCurrentA); // C / A = s
-              const max = 30 * 24 * 3600; // cap at 30 days
-              if (seconds < 0) seconds = 0;
-              if (seconds > max) seconds = max;
-              computedTR = seconds;
+            if (remainingC !== null && Number.isFinite(remainingC)) {
+              if (
+                dischargeCurrentA !== null &&
+                Number.isFinite(dischargeCurrentA) &&
+                dischargeCurrentA > 0
+              ) {
+                // Calculate time remaining from discharge rate
+                let seconds = Math.round(remainingC / dischargeCurrentA); // C / A = s
+                const max = 30 * 24 * 3600; // cap at 30 days
+                if (seconds < 0) seconds = 0;
+                if (seconds > max) seconds = max;
+                computedTR = seconds;
+              } else {
+                // Current is too low or battery is not discharging: output maximum value
+                computedTR = 30 * 24 * 3600; // 30 days in seconds
+              }
             }
           }
 
@@ -284,6 +288,34 @@ export default function createBatteryConversion(
                   dcType: "Battery",
                   stateOfCharge: 100,
                   timeRemaining: "05:15:00",
+                },
+              },
+            ],
+          },
+          // Low current (below threshold): output maximum time remaining (30 days)
+          {
+            input: [13.26, 0, null, 292.9, 0.99, null, 376056, 378000, null, null],
+            expected: [
+              {
+                prio: 2,
+                pgn: 127508,
+                dst: 255,
+                fields: {
+                  instance: 1,
+                  voltage: 13.26,
+                  current: 0,
+                  temperature: 292.9,
+                },
+              },
+              {
+                prio: 2,
+                pgn: 127506,
+                dst: 255,
+                fields: {
+                  instance: 1,
+                  dcType: "Battery",
+                  stateOfCharge: 99,
+                  timeRemaining: "720:00:00",
                 },
               },
             ],
