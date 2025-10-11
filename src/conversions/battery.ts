@@ -16,12 +16,19 @@ interface BatteryConfig {
 }
 
 /**
+ * Smoothing state for time remaining values
+ */
+const timeRemainingSmoothing = new Map<string, number>();
+const SMOOTHING_FACTOR = 0.3; // 30% new value, 70% previous (adjust for more/less smoothing)
+
+/**
  * Battery conversion options
  */
 interface BatteryOptions {
-  BATTERY: {
-    batteries: BatteryConfig[];
-  };
+  batteries: BatteryConfig[];
+  enabled?: boolean;
+  resend?: number;
+  resendTime?: number;
 }
 
 /**
@@ -69,23 +76,21 @@ export default function createBatteryConversion(
     }),
 
     testOptions: {
-      BATTERY: {
-        batteries: [
-          {
-            signalkId: 0,
-            instanceId: 1,
-          },
-        ],
-      },
+      batteries: [
+        {
+          signalkId: 0,
+          instanceId: 1,
+        },
+      ],
     },
 
     conversions: (options: unknown) => {
       const batteryOptions = options as BatteryOptions;
-      if (!batteryOptions?.BATTERY?.batteries) {
+      if (!batteryOptions?.batteries) {
         return null;
       }
 
-      return batteryOptions.BATTERY.batteries.map((battery) => ({
+      return batteryOptions.batteries.map((battery) => ({
         keys: batteryKeys.map((key) => `electrical.batteries.${battery.signalkId}.${key}`),
         timeouts: batteryKeys.map(() => 60000),
         callback: ((
@@ -136,7 +141,7 @@ export default function createBatteryConversion(
             // - negative current = discharging
             let dischargeCurrentA: number | null = null;
             if (current !== null && Number.isFinite(current)) {
-              const threshold = 0.1;
+              const threshold = 0.5; // Increased from 0.1 to 0.5A to avoid noise
               if (current > threshold) {
                 dischargeCurrentA = current; // positive discharging
               } else if (current < -threshold) {
@@ -155,10 +160,22 @@ export default function createBatteryConversion(
                 const max = 30 * 24 * 3600; // cap at 30 days
                 if (seconds < 0) seconds = 0;
                 if (seconds > max) seconds = max;
+
+                // Apply exponential smoothing to reduce jitter
+                const smoothingKey = `${battery.signalkId}_${battery.instanceId}`;
+                const previousValue = timeRemainingSmoothing.get(smoothingKey);
+                if (previousValue !== undefined) {
+                  seconds = Math.round(
+                    SMOOTHING_FACTOR * seconds + (1 - SMOOTHING_FACTOR) * previousValue
+                  );
+                }
+                timeRemainingSmoothing.set(smoothingKey, seconds);
+
                 computedTR = seconds;
               } else {
-                // Current is too low or battery is not discharging: output maximum value
-                computedTR = 30 * 24 * 3600; // 30 days in seconds
+                // Current is too low or battery is not discharging: output null (no meaningful value)
+                // This prevents displaying arbitrary maximum when battery is idle/charging
+                computedTR = null;
               }
             }
           }
@@ -292,7 +309,7 @@ export default function createBatteryConversion(
               },
             ],
           },
-          // Low current (below threshold): output maximum time remaining (30 days)
+          // Low current (below threshold): omit timeRemaining field (no meaningful value)
           {
             input: [13.26, 0, null, 292.9, 0.99, null, 376056, 378000, null, null],
             expected: [
@@ -315,7 +332,7 @@ export default function createBatteryConversion(
                   instance: 1,
                   dcType: "Battery",
                   stateOfCharge: 99,
-                  timeRemaining: "720:00:00",
+                  // timeRemaining omitted when null - canboatjs won't include it in parsed output
                 },
               },
             ],

@@ -25,15 +25,23 @@ interface EngineConfig {
 }
 
 /**
- * Engine parameters options
+ * Engine parameters options for exhaust temperature
  */
-interface EngineParametersOptions {
-  EXHAUST_TEMPERATURE?: {
-    engines: ExhaustTempEngineConfig[];
-  };
-  ENGINE_PARAMETERS?: {
-    engines: EngineConfig[];
-  };
+interface ExhaustTempOptions {
+  engines: ExhaustTempEngineConfig[];
+  enabled?: boolean;
+  resend?: number;
+  resendTime?: number;
+}
+
+/**
+ * Engine parameters options for engine parameters
+ */
+interface EngineParamsOptions {
+  engines: EngineConfig[];
+  enabled?: boolean;
+  resend?: number;
+  resendTime?: number;
 }
 
 /**
@@ -84,23 +92,21 @@ export default function createEngineParametersConversions(
       }),
 
       testOptions: {
-        EXHAUST_TEMPERATURE: {
-          engines: [
-            {
-              signalkId: 10,
-              tempInstanceId: 1,
-            },
-          ],
-        },
+        engines: [
+          {
+            signalkId: 10,
+            tempInstanceId: 1,
+          },
+        ],
       },
 
       conversions: (options: unknown) => {
-        const engineOptions = options as EngineParametersOptions;
-        if (!engineOptions?.EXHAUST_TEMPERATURE?.engines) {
+        const engineOptions = options as ExhaustTempOptions;
+        if (!engineOptions?.engines) {
           return null;
         }
 
-        return engineOptions.EXHAUST_TEMPERATURE?.engines.map((engine) => ({
+        return engineOptions.engines.map((engine) => ({
           keys: [`propulsion.${engine.signalkId}.exhaustTemperature`],
           callback: ((temperature: number | null) => {
             try {
@@ -170,23 +176,21 @@ export default function createEngineParametersConversions(
       }),
 
       testOptions: {
-        ENGINE_PARAMETERS: {
-          engines: [
-            {
-              signalkId: 0,
-              instanceId: 1,
-            },
-          ],
-        },
+        engines: [
+          {
+            signalkId: 0,
+            instanceId: 1,
+          },
+        ],
       },
 
       conversions: (options: unknown) => {
-        const engineOptions = options as EngineParametersOptions;
-        if (!engineOptions?.ENGINE_PARAMETERS?.engines) {
+        const engineOptions = options as EngineParamsOptions;
+        if (!engineOptions?.engines) {
           return null;
         }
 
-        const dyn = engineOptions.ENGINE_PARAMETERS?.engines.map((engine) => ({
+        const dyn = engineOptions.engines.map((engine) => ({
           keys: engParKeys.map((key) => `propulsion.${engine.signalkId}.${key}`),
           timeouts: engParKeys.map(() => DEFAULT_TIMEOUT),
           callback: ((
@@ -284,7 +288,7 @@ export default function createEngineParametersConversions(
           ],
         }));
 
-        const rapid = engineOptions.ENGINE_PARAMETERS?.engines.map((engine) => ({
+        const rapid = engineOptions.engines.map((engine) => ({
           keys: engRapidKeys.map((key) => `propulsion.${engine.signalkId}.${key}`),
           timeouts: engRapidKeys.map(() => DEFAULT_TIMEOUT),
           callback: ((

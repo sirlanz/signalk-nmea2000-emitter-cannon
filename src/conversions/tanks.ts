@@ -27,9 +27,10 @@ interface TankConfig {
  * Tank options interface
  */
 interface TankOptions {
-  TANKS: {
-    tanks: TankConfig[];
-  };
+  tanks: TankConfig[];
+  enabled?: boolean;
+  resend?: number;
+  resendTime?: number;
 }
 
 /**
@@ -82,23 +83,21 @@ export default function createTanksConversion(app: SignalKApp): ConversionModule
     },
 
     testOptions: {
-      TANKS: {
-        tanks: [
-          {
-            signalkPath: "tanks.fuel.0",
-            instanceId: 1,
-          },
-        ],
-      },
+      tanks: [
+        {
+          signalkPath: "tanks.fuel.0",
+          instanceId: 1,
+        },
+      ],
     },
 
     conversions: (options: unknown) => {
       const tankOptions = options as TankOptions;
-      if (!tankOptions?.TANKS?.tanks) {
+      if (!tankOptions?.tanks) {
         return null;
       }
 
-      const validConversions = tankOptions.TANKS.tanks.map((tank) => {
+      const validConversions = tankOptions.tanks.map((tank) => {
         const split = tank.signalkPath.split(".");
         const tankType = split[1];
 

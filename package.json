@@ -1,6 +1,6 @@
 {
   "name": "sk-n2k-emitter",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Signal K server plugin to convert Signal K to NMEA2000 with Garmin PGN specification alignment and canboatjs framework compatibility",
   "main": "dist/index.js",
   "type": "module",
@@ -11,11 +11,11 @@
     "CHANGELOG.md"
   ],
   "scripts": {
-    "build": "npm run clean && mkdir -p dist/sk-n2k-emitter && esbuild src/index.ts --bundle --platform=node --target=node20 --format=esm --outfile=dist/sk-n2k-emitter/index.js --external:@canboat/canboatjs --external:rxjs --external:es-toolkit --external:path-scurry && cp package.json README.md LICENSE CHANGELOG.md dist/sk-n2k-emitter/",
+    "build": "npm run clean && mkdir -p dist/sk-n2k-emitter && esbuild src/index.ts --bundle --platform=node --target=node20 --format=esm --outfile=dist/sk-n2k-emitter/index.js --external:@canboat/canboatjs --external:rxjs --external:es-toolkit --external:path-scurry && cp package.json README.md LICENSE CHANGELOG.md dist/sk-n2k-emitter/ && node -e \"const fs=require('fs');const pkg=JSON.parse(fs.readFileSync('dist/sk-n2k-emitter/package.json'));pkg.main='index.js';fs.writeFileSync('dist/sk-n2k-emitter/package.json',JSON.stringify(pkg,null,2))\"",
     "build:npm": "esbuild src/index.ts --bundle --platform=node --target=node20 --format=esm --outfile=dist/index.js --external:@canboat/canboatjs --external:rxjs --external:es-toolkit --external:path-scurry",
     "build:watch": "npm run build -- --watch",
     "dev": "tsx src/index.ts",
-    "test": "vitest",
+    "test": "vitest --run",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "lint": "biome lint src/",
@@ -40,7 +40,7 @@
   "signalk-plugin-enabled-by-default": false,
   "signalk": {
     "appIcon": "./assets/icons/icon-72x72.png",
-    "displayName": "SignalK to N2K Emitter"
+    "displayName": "SignalK N2K Emitter"
   },
   "author": {
     "name": "Scott Bender",
@@ -57,7 +57,7 @@
   ],
   "license": "ISC",
   "dependencies": {
-    "es-toolkit": "^1.28.1",
+    "es-toolkit": "^1.40.0",
     "path-scurry": "^2.0.0",
     "rxjs": "^7.8.2"
   },
@@ -66,12 +66,13 @@
     "url": "https://github.com/NearlCrews/sk-n2k-emitter"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.2.5",
     "@canboat/canboatjs": "^3.11.0",
-    "@types/node": "^24.6.1",
+    "@types/node": "^24.7.2",
     "@vitest/ui": "^3.2.4",
     "esbuild": "^0.25.10",
     "signalk-server": "^2.16.0",
-    "tsx": "^4.19.2",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"
   },

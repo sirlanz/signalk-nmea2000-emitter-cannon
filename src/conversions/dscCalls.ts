@@ -34,9 +34,9 @@ export default function createDscCallsConversion(
       callType: string | null,
       mmsi: number | null,
       nature: string | null,
-      position: Position | null,
-      workingFreq: number | null,
-      vesselInDistress: number | null,
+      _position: Position | null,
+      _workingFreq: number | null,
+      _vesselInDistress: number | null,
       _callTime: string | null
     ) => {
       // Send DSC call data if we have essential information
@@ -73,20 +73,6 @@ export default function createDscCallsConversion(
       const callTypeString = callType || "";
       const natureString = nature || "";
       const mmsiNumber = mmsi || 0;
-      const _vesselInDistressNumber = vesselInDistress || mmsiNumber;
-
-      // Handle frequency conversion
-      let _frequency = 0;
-      if (typeof workingFreq === "number") {
-        _frequency = workingFreq < 1000 ? workingFreq * 1000000 : workingFreq;
-      }
-
-      // Handle position - convert to compatible object
-      const pos = position || { latitude: 0, longitude: 0 };
-      const _positionObject = {
-        latitude: pos.latitude || 0,
-        longitude: pos.longitude || 0,
-      };
 
       return [
         {

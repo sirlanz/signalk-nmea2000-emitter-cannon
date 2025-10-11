@@ -13,9 +13,10 @@ interface SolarChargerConfig {
  * Solar options interface
  */
 interface SolarOptions {
-  SOLAR: {
-    chargers: SolarChargerConfig[];
-  };
+  chargers: SolarChargerConfig[];
+  enabled?: boolean;
+  resend?: number;
+  resendTime?: number;
 }
 
 /**
@@ -56,24 +57,22 @@ export default function createSolarConversion(): ConversionModule {
     }),
 
     testOptions: {
-      SOLAR: {
-        chargers: [
-          {
-            signalkId: "bimini",
-            instanceId: 10,
-            panelInstanceId: 11,
-          },
-        ],
-      },
+      chargers: [
+        {
+          signalkId: "bimini",
+          instanceId: 10,
+          panelInstanceId: 11,
+        },
+      ],
     },
 
     conversions: (options: unknown) => {
       const solarOptions = options as SolarOptions;
-      if (!solarOptions?.SOLAR?.chargers) {
+      if (!solarOptions?.chargers) {
         return null;
       }
 
-      return solarOptions.SOLAR.chargers.map((charger) => ({
+      return solarOptions.chargers.map((charger) => ({
         keys: solarKeys.map((key) => `electrical.solar.${charger.signalkId}.${key}`),
         timeouts: solarKeys.map(() => 60000),
         callback: (

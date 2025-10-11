@@ -25,7 +25,6 @@ export class PluginManager {
 
   constructor(app: SignalKApp, plugin: SignalKPlugin) {
     this.app = app;
-    this.plugin = plugin;
 
     // Load conversions at initialization
     this.conversions = createConversionModules(app, plugin);
