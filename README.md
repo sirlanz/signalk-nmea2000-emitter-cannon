@@ -1,4 +1,4 @@
-# SignalK NMEA2000 Emitter Cannon
+# Signal K NMEA2000 Emitter Cannon
 
 ![npm version](https://badge.fury.io/js/signalk-nmea2000-emitter-cannon.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat&logo=typescript&logoColor=white)
