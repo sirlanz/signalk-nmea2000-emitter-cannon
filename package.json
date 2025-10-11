@@ -64,7 +64,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/NearlCrews/signalk-nmea2000-emitter-cannon"
+    "url": "git+https://github.com/NearlCrews/signalk-nmea2000-emitter-cannon.git"
   },
   "homepage": "https://github.com/NearlCrews/signalk-nmea2000-emitter-cannon#readme",
   "bugs": {
