@@ -1,5 +1,23 @@
 ## Change Log
 
+### v1.0.1 (2025/10/11) - Repository Best Practices Update
+
+**GitHub Community Files**:
+- Added CONTRIBUTING.md with comprehensive contribution guidelines
+- Added SECURITY.md with security policy and vulnerability reporting
+- Added GitHub issue templates (bug report, feature request)
+- Added GitHub PR template with comprehensive checklist
+- Created .npmignore for explicit npm publishing control
+
+**Configuration Updates**:
+- Updated license from ISC to Apache-2.0 (matches LICENSE file)
+- Fixed README manual installation path
+- Removed package-lock.json from .gitignore for reproducible builds
+
+This release improves contributor experience and aligns with open source best practices.
+
+---
+
 ### v1.0.0 (2025/10/11) - Initial Release as Signal K NMEA2000 Emitter Cannon
 
 **Project Renamed**: Formerly known as sk-n2k-emitter, now released as signalk-nmea2000-emitter-cannon v1.0.0
