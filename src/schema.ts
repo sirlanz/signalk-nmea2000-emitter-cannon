@@ -197,7 +197,7 @@ export const schema: JSONSchema = {
         },
       },
     },
-    GPS: {
+    GPS_LOCATION: {
       type: "object",
       title: "GPS Position",
       description: "PGNs: 129025, 129029",
